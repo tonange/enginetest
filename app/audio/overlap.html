@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>audio overlap</title>
+
+  <style>
+    @font-face {
+      font-family: 'OpenSansLight';
+      src: url('../font/OpenSans-Light.ttf') format('truetype');
+    }
+    body {
+      margin: 10px 20px;
+      font-family: OpenSansLight, sans-serif;
+      font-size: 20px;
+      background-color: #000;
+      color: #fff;
+      background-image:url("media/moon.jpg");
+      background-repeat: no-repeat;
+    }
+    .shadow {
+      text-shadow: 2px 2px 1px #000;
+    }
+    button {
+      font-family: OpenSansLight, sans-serif;
+      font-size: 20px;
+      color: #FFF;
+      border: 1px solid #848484;
+      border-radius: 3px;
+      background-color: #000000;
+      height: 50px;
+    }
+    button:focus {
+      outline: none;
+    }
+    .control {
+      width: 50px;
+      cursor: pointer;
+      padding: 0px;
+    }
+    .mr {
+      margin-right: 10px;
+    }
+    progress {
+      width: 377px;
+      margin-top: 25px;
+      margin-bottom: 10px;
+      color: white;
+      background-color: black;
+      border: 1px solid white;
+      height: 10px;
+      border-radius: 3px;
+    }
+    #status {
+      margin-top: 30px;
+    }
+
+  </style>
+
+  <script>
+
+    var error = [ false, false, false ];
+    var suspended = [ false, false, false ];
+    var interrupted = [ false, false, false ];
+
+    function play() {
+      log('play');
+      var player = document.getElementById('player0');
+      if (player) {
+        player.currentTime = 0;
+        player.play();
+      }
+      setTimeout(function() {
+        var player = document.getElementById('player1');
+        if (player) {
+          player.currentTime = 0;
+          player.play();
+        }
+      }, 2000);
+      setTimeout(function() {
+        var player = document.getElementById('player2');
+        if (player) {
+          player.currentTime = 0;
+          player.play();
+        }
+      }, 4000);
+    }
+
+    function pause() {
+      log('pause');
+      for (i=0; i<3; i++) {
+        var player = document.getElementById('player'+i);
+        if (player) {
+          player.pause();
+        }
+      }
+    }
+
+    function handle(e) {
+      // e.target = this = player
+      var p = e.target
+      var id = e.target.id;
+      var num = parseInt(id.substr(id.length - 1));
+      switch (e.type) {
+        case 'playing':
+          suspended[num] = false;
+          break;
+        /* misleading: means "done loading"
+        case 'suspend':
+          suspended = true;
+          break;
+        */
+        case 'timeupdate':
+          showProgress('progress'+num, p.currentTime, p.duration)
+          break;
+        case 'error':
+          error[num] = true;
+          break;
+        case 'interruptbegin':
+          interrupted[num] = true;
+          break;
+        case 'interruptend':
+          interrupted[num] = false;
+          break;
+      }
+      showStatus();
+    }
+
+    function showStatus() {
+      for (i=0; i<3; i++) {
+        var status = document.getElementById('status'+i);
+        var player = document.getElementById('player'+i);
+        if (status && player) {
+          var text = i + ': pos ' + secondsToHms(player.currentTime.toFixed());
+          if (player.paused) text += ' paused';
+          if (player.muted) text += ' muted';
+          if (player.seeking) text += ' seeking';
+          if (suspended[i]) text += ' suspended';
+          if (interrupted[i]) text += ' interrupted';
+          if (error[i]) text += ' had_error';
+          if (player.ended) text += ' ended';
+          status.innerHTML = text;
+        }
+      }
+    }
+
+    function showProgress(id, pos, total) {
+      var bar = document.getElementById(id);
+      if (bar) {
+        bar.value = 100 * pos / total;
+      }
+    }
+
+    function log() {
+    	var args = Array.prototype.slice.call(arguments);
+    	for (var i=0; i<args.length; i++) {
+        if (typeof args[i] === 'string' || args[i] instanceof String) {
+          // already a string: don't touch it
+        } else {
+          try {
+            args[i] = JSON.stringify(args[i]);
+          } catch(err) {
+            args[i] = args[i].toString();
+          }
+        }
+    	}
+      var today = new Date().toISOString().slice(11, 23);
+      var now =  '[' + today + ']';
+    	var msg = {
+    		source: 'enginetest',
+        severity: 5,
+        timestamp: now,
+    		message: args.join(' ')
+    	};
+    	console.log(JSON.stringify(msg));
+    }
+
+    function init() {
+      for (var i=0; i<3; i++) {
+        player = document.getElementById('player'+i);
+        if (player) {
+          // subset, see https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Media_events
+          player.addEventListener('durationchange', handle);
+          player.addEventListener('ended', handle);
+          player.addEventListener('error', handle);
+          player.addEventListener('interruptbegin', handle);
+          player.addEventListener('interruptend', handle);
+          player.addEventListener('pause', handle);
+          player.addEventListener('play', handle);
+          player.addEventListener('playing', handle);
+          player.addEventListener('progress', handle);
+          player.addEventListener('seeked', handle);
+          player.addEventListener('seeking', handle);
+          player.addEventListener('suspend', handle);
+          player.addEventListener('timeupdate', handle);
+        }
+        showStatus();
+      }
+    }
+
+    function secondsToHms(d) {
+      d = Number(d);
+      var h = Math.floor(d / 3600);
+      var m = Math.floor(d % 3600 / 60);
+      var s = Math.floor(d % 3600 % 60);
+      var res = ('0' + m).slice(-2) + ":" + ('0' + s).slice(-2);
+      if (h > 0) {
+        res = ('0' + h).slice(-2) + ":" + res;
+      }
+      return res;
+    }
+
+    /**
+      get startet when loaded
+    **/
+    window.addEventListener('load', init, false);
+
+	</script>
+
+</head>
+<body>
+
+  <h3 class="shadow">overlap</h3>
+
+  <audio id="player0" src="media/apollo11_countdown.mp3"> </audio>
+  <audio id="player1" src="media/eagle_has_landed.mp3"> </audio>
+  <audio id="player2" src="media/smallStep.mp3"> </audio>
+
+  <progress id="progress0" value="0" max="100"></progress>
+  <div id="status0" class="shadow"></div>
+
+  <progress id="progress1" value="0" max="100"></progress>
+  <div id="status1" class="shadow"></div>
+
+  <progress id="progress2" value="0" max="100"></progress>
+  <div id="status2" class="shadow"></div>
+
+  <br>
+  <div>
+    <button class="control mr" onclick="pause()">||</button>
+    <button class="control mr" onclick="play()">&gt;</button>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>audio loop</title>
+
+  <style>
+    @font-face {
+      font-family: 'OpenSansLight';
+      src: url('../font/OpenSans-Light.ttf') format('truetype');
+    }
+    body {
+      margin: 10px 20px;
+      font-family: OpenSansLight, sans-serif;
+      font-size: 20px;
+      background-color: #000;
+      color: #fff;
+      background-image:url("media/kindergarten.png");
+      background-repeat: no-repeat;
+    }
+    .shadow {
+      text-shadow: 2px 2px 1px #000;
+    }
+    button {
+      font-family: OpenSansLight, sans-serif;
+      font-size: 20px;
+      color: #FFF;
+      border: 1px solid #848484;
+      border-radius: 3px;
+      background-color: #000000;
+      height: 50px;
+    }
+    button:focus {
+      outline: none;
+    }
+    .control {
+      width: 50px;
+      cursor: pointer;
+      padding: 0px;
+    }
+    .mr {
+      margin-right: 10px;
+    }
+    progress {
+      width: 377px;
+      margin-top: 180px;
+      margin-bottom: 20px;
+      color: white;
+      background-color: black;
+      border: 1px solid white;
+      height: 10px;
+      border-radius: 3px;
+    }
+    #status {
+      margin-top: 30px;
+    }
+
+  </style>
+
+  <script>
+
+    var player;
+    var error = false;
+    var suspended = false;
+    var interrupted = false;
+
+    function play() {
+      log('play');
+      if (player) {
+        player.play();
+      }
+    }
+
+    function pause() {
+      log('pause');
+      if (player) {
+        player.pause();
+      }
+    }
+
+    function seek(id) {
+      log('seek', id);
+      var player = document.getElementById(id);
+      if (player) {
+        player.currentTime = player.duration - 5;
+      }
+    }
+
+    function handle(e) {
+      // e.target = this = player
+      //log('player', 'handle', e.type);
+      var p = e.target
+      switch (e.type) {
+        case 'playing':
+          suspended = false;
+          break;
+        /* misleading: means "done loading"
+        case 'suspend':
+          suspended = true;
+          break;
+        */
+        case 'timeupdate':
+          showProgress('progress', p.currentTime, p.duration)
+          break;
+        case 'error':
+          error = true;
+          break;
+        case 'interruptbegin':
+          interrupted = true;
+          break;
+        case 'interruptend':
+          interrupted = false;
+          break;
+        case 'pause':
+        case 'play':
+        case 'seeked':
+        case 'seeking':
+        case 'progress':
+        case 'durationchange':
+        case 'ended':
+          break;
+        default:
+          log('player', 'handle', e.type,
+                      'currentTime', p.currentTime,
+                      'duration', p.duration,
+                      'loop', p.loop,
+                      'muted', p.muted,
+                      'ended', p.ended,
+                      'paused', p.paused,
+                      'seeking', p.seeking,
+                      'ended', p.ended);
+      }
+      showStatus(p);
+    }
+
+    function showStatus(player) {
+      var status = document.getElementById('status');
+      if (status && player) {
+        var text = 'pos ' + secondsToHms(player.currentTime.toFixed());
+        if (player.paused) text += ' paused';
+        if (player.muted) text += ' muted';
+        if (player.seeking) text += ' seeking';
+        if (suspended) text += ' suspended';
+        if (interrupted) text += ' interrupted';
+        if (error) text += ' had_error';
+        if (player.ended) text += ' ended';
+        status.innerHTML = text;
+      }
+    }
+
+    function showProgress(id, pos, total) {
+      var bar = document.getElementById(id);
+      if (bar) {
+        bar.value = 100 * pos / total;
+      }
+    }
+
+    function log() {
+    	var args = Array.prototype.slice.call(arguments);
+    	for (var i=0; i<args.length; i++) {
+        if (typeof args[i] === 'string' || args[i] instanceof String) {
+          // already a string: don't touch it
+        } else {
+          try {
+            args[i] = JSON.stringify(args[i]);
+          } catch(err) {
+            args[i] = args[i].toString();
+          }
+        }
+    	}
+      var today = new Date().toISOString().slice(11, 23);
+      var now =  '[' + today + ']';
+    	var msg = {
+    		source: 'enginetest',
+        severity: 5,
+        timestamp: now,
+    		message: args.join(' ')
+    	};
+    	console.log(JSON.stringify(msg));
+    }
+
+    function init() {
+      player = document.getElementById('player');
+      if (player) {
+        // subset, see https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Media_events
+        player.addEventListener('durationchange', handle);
+        player.addEventListener('ended', handle);
+        player.addEventListener('error', handle);
+        player.addEventListener('interruptbegin', handle);
+        player.addEventListener('interruptend', handle);
+        player.addEventListener('pause', handle);
+        player.addEventListener('play', handle);
+        player.addEventListener('playing', handle);
+        player.addEventListener('progress', handle);
+        player.addEventListener('seeked', handle);
+        player.addEventListener('seeking', handle);
+        player.addEventListener('suspend', handle);
+        player.addEventListener('timeupdate', handle);
+        showStatus(player);
+      }
+      // audio last mode
+      var url = new URL(window.location.href);
+      if (url.searchParams.has('audioLastMode')) {
+        log('audioLastMode');
+        play('player');
+      }
+    }
+
+    function secondsToHms(d) {
+      d = Number(d);
+      var h = Math.floor(d / 3600);
+      var m = Math.floor(d % 3600 / 60);
+      var s = Math.floor(d % 3600 % 60);
+      var res = ('0' + m).slice(-2) + ":" + ('0' + s).slice(-2);
+      if (h > 0) {
+        res = ('0' + h).slice(-2) + ":" + res;
+      }
+      return res;
+    }
+
+    /**
+      get startet when loaded
+    **/
+    window.addEventListener('load', init, false);
+
+	</script>
+
+</head>
+<body>
+
+  <h3 class="shadow">audio file on a loop</h3>
+
+  <audio id="player" loop src="media/Es%20tanzt%20ein%20Bi-Ba-Butzemann.mp3"> </audio>
+
+  <progress id="progress" value="0" max="100"></progress>
+
+  <div>
+    <button class="control mr" onclick="pause('player')">||</button>
+    <button class="control mr" onclick="play('player')">&gt;</button>
+    <button class="control" onclick="seek('player')">&gt;|</button>
+  </div>
+
+  <div id="status"></div>
+
+</body>
+</html>

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>JS engine instances</title>
+
+  <style>
+    @font-face {
+      font-family: 'OpenSansLight';
+      src: url('../font/OpenSans-Light.ttf') format('truetype');
+    }
+    body {
+      margin: 15px;
+      font-family: OpenSansLight, sans-serif;
+      font-size: 20px;
+      background-color: #000;
+      color: #fff;
+    }
+    .pic {
+      width: 200px;
+      height: auto;
+      margin-bottom: 30px;
+    }
+    button {
+      font-family: OpenSansLight, sans-serif;
+      font-size: 20px;
+      color: #FFF;
+      border: 1px solid #848484;
+      border-radius: 3px;
+      background-color: #000000;
+      height: 50px;
+    }
+    button:focus {
+      outline: none;
+    }
+    .control {
+      width: 50px;
+      cursor: pointer;
+      padding: 0px;
+    }
+    .mr {
+      margin-right: 10px;
+    }
+    .rTable { display: table; }
+    .rTableRow { display: table-row; }
+    .rTableHeading { display: table-header-group; }
+    .rTableBody { display: table-row-group; }
+    .rTableFoot { display: table-footer-group; }
+    .rTableCell, .rTableHead { display: table-cell;	padding: 12px 10px; }
+
+
+  </style>
+
+  <script src="script/startapp.js"></script>
+
+  <script>
+
+  function status(index, text) {
+    setElem('status' + index, text);
+  }
+
+  function result(index, text) {
+    setElem('result' + index, text);
+  }
+
+  function setElem(id, text) {
+    var elem = document.getElementById(id);
+    if (elem) {
+      elem.innerHTML = text;
+    }
+  }
+
+  function init() {
+    startappinit(status, result);
+  }
+
+  /**
+    get startet when loaded
+  **/
+  window.addEventListener('load', init, false);
+
+  </script>
+
+</head>
+<body>
+
+  <div class="rTable">
+    <div class="rTableRow">
+      <div class="rTableCell">
+        <button class="control mr" onclick="start(1)">&gt;</button>
+        <button class="control mr" onclick="stop(1)">||</button>
+      </div>
+      <div class="rTableCell">
+        Instance 1 - status:
+      </div>
+      <div class="rTableCell" id="status1">
+      </div>
+      <div class="rTableCell" id="result1">
+      </div>
+    </div>
+    <div class="rTableRow">
+      <div class="rTableCell">
+        <button class="control mr" onclick="start(2)">&gt;</button>
+        <button class="control mr" onclick="stop(2)">||</button>
+      </div>
+      <div class="rTableCell">
+        Instance 2 - status:
+      </div>
+      <div class="rTableCell" id="status2">
+      </div>
+      <div class="rTableCell" id="result2">
+      </div>
+    </div>
+    <div class="rTableRow">
+      <div class="rTableCell">
+        <button class="control mr" onclick="start(3)">&gt;</button>
+        <button class="control mr" onclick="stop(3)">||</button>
+      </div>
+      <div class="rTableCell">
+        Instance 3 - status:
+      </div>
+      <div class="rTableCell" id="status3">
+      </div>
+      <div class="rTableCell" id="result3">
+      </div>
+    </div>
+    <div class="rTableRow">
+      <div class="rTableCell">
+        <button class="control mr" onclick="start(4)">&gt;</button>
+        <button class="control mr" onclick="stop(4)">||</button>
+      </div>
+      <div class="rTableCell">
+        Instance 4 - status:
+      </div>
+      <div class="rTableCell" id="status4">
+      </div>
+      <div class="rTableCell" id="result4">
+      </div>
+    </div>
+    <div class="rTableRow">
+      <div class="rTableCell">
+        <button class="control mr" onclick="start(5)">&gt;</button>
+        <button class="control mr" onclick="stop(5)">||</button>
+      </div>
+      <div class="rTableCell">
+        Instance 5 - status:
+      </div>
+      <div class="rTableCell" id="status5">
+      </div>
+      <div class="rTableCell" id="result5">
+      </div>
+    </div>
+    <div class="rTableRow">
+      <div class="rTableCell">
+        <button class="control mr" onclick="start(6)">&gt;</button>
+        <button class="control mr" onclick="stop(6)">||</button>
+      </div>
+      <div class="rTableCell">
+        Instance 6 - status:
+      </div>
+      <div class="rTableCell" id="status6">
+      </div>
+      <div class="rTableCell" id="result6">
+      </div>
+    </div>
+    <div class="rTableRow">
+      <div class="rTableCell">
+        <button class="control mr" onclick="start(7)">&gt;</button>
+        <button class="control mr" onclick="stop(7)">||</button>
+      </div>
+      <div class="rTableCell">
+        Instance 7 - status:
+      </div>
+      <div class="rTableCell" id="status7">
+      </div>
+      <div class="rTableCell" id="result7">
+      </div>
+    </div>
+    <div class="rTableRow">
+      <div class="rTableCell">
+        <button class="control mr" onclick="start(8)">&gt;</button>
+        <button class="control mr" onclick="stop(8)">||</button>
+      </div>
+      <div class="rTableCell">
+        Instance 8 - status:
+      </div>
+      <div class="rTableCell" id="status8">
+      </div>
+      <div class="rTableCell" id="result8">
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

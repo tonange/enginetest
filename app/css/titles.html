@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>3D scrolling text</title>
+
+  <style>
+    @font-face {
+      font-family: 'OpenSansLight';
+      src: url('../font/OpenSans-Light.ttf') format('truetype');
+    }
+
+    body, html
+    {
+    	width: 100%;
+    	height: 100%;
+    	font-family: "OpenSansLight", arial, verdana, sans-serif;
+    	font-weight: 700;
+    	color: #ff6;
+    	background-color: #000;
+    	overflow: hidden;
+    }
+
+    p#start
+    {
+    	position: relative;
+    	width: 16em;
+    	font-size: 200%;
+    	font-weight: 400;
+    	margin: 20% auto;
+    	color: #4ee;
+    	opacity: 0;
+    	z-index: 1;
+    	animation: intro 2s ease-out;
+    }
+
+    @keyframes intro {
+    	0% { opacity: 1; }
+    	90% { opacity: 1; }
+    	100% { opacity: 0; }
+    }
+
+    h1
+    {
+    	position: absolute;
+    	width: 2.6em;
+    	left: 50%;
+    	top: 25%;
+    	font-size: 10em;
+    	text-align: center;
+    	margin-left: -1.3em;
+    	line-height: 0.8em;
+    	letter-spacing: -0.05em;
+    	color: #000;
+    	text-shadow: -2px -2px 0 #ff6, 2px -2px 0 #ff6, -2px 2px 0 #ff6, 2px 2px 0 #ff6;
+    	opacity: 0;
+    	z-index: 1;
+    	animation: logo 5s ease-out 2.5s;
+    }
+
+    h1 sub
+    {
+    	display: block;
+    	font-size: 0.3em;
+    	letter-spacing: 0;
+    	line-height: 0.8em;
+    }
+
+    @keyframes logo {
+    	0% { transform: scale(1); opacity: 1; }
+    	50% { opacity: 1; }
+    	100% { transform: scale(0.1); opacity: 0; }
+    }
+
+    /* the interesting 3D scrolling stuff */
+    #titles
+    {
+    	position: absolute;
+    	width: 24em;
+    	height: 500em;
+    	bottom: 0;
+    	left: 50%;
+    	margin-left: -12em;
+    	font-size: 250%;
+    	text-align: justify;
+    	overflow: hidden;
+    	transform-origin: 50% 100%;
+    	transform: perspective(400px) rotateX(25deg);
+    }
+
+    #titles:after
+    {
+    	position: absolute;
+    	content: ' ';
+    	left: 0;
+    	right: 0;
+    	top: 0;
+    	bottom: 60%;
+    	background-image: linear-gradient(top, rgba(0,0,0,1) 0%, transparent 100%);
+    	pointer-events: none;
+    }
+
+    #titles p
+    {
+    	text-align: justify;
+    	margin: 0.8em 0;
+    }
+
+    #titles p.center
+    {
+    	text-align: center;
+    }
+
+    #titles p.big
+    {
+      font-size: 400%;
+    }
+
+    #titles a
+    {
+    	color: #ff6;
+    	text-decoration: underline;
+    }
+
+    #titlecontent
+    {
+    	position: absolute;
+    	top: 100%;
+      width: 100%;
+    	animation: scroll 1000s linear 4s infinite;
+    }
+
+    /* animation */
+    @keyframes scroll {
+    	0% { top: 100%; }
+    	100% { top: -170%; }
+    }
+
+  </style>
+
+</head>
+<body>
+
+  <p id="start">A short time to go in a your car, right here&hellip;</p>
+
+  <h1>MIB3<sub>functions as apps</sub></h1>
+
+  <div id="titles"><div id="titlecontent">
+
+    <p class="center big">WebApps<br /></p>
+    <p class="center">A NEW HOPE FOR MOD<br /></p>
+
+    <p>	MIB3_RQ_SYS_WEB1	Document	</p>
+    <p>	MIB3_RQ_SYS_WEB2	Purpose of Document	</p>
+    <p>	MIB3_RQ_SYS_WEB3	"This document specifies a web engine in which HTML/CSS based content can be rendered, including the execution of JavaScript code. The content can be regular web content that is loaded from a backend server as well as so called web apps which are stored locally. The web enigne can also be used to run locally stored JavaScript code that does not use HTML as its presentation layer (headless apps).
+        <br>
+        Basically the web engine is a standard engine like WebKit or Blink plus the necessary integration into the surrounding infotainment system and an interface for command and control that the system's HMI can use.
+        <br>
+        The requirements are tailored so that a contemporary standard web engine can be integrated with as little modification as possible (prefereably none) thus allowing updates of the web engine, e.g. for security fixes, with as little effort and lead time as possible."	</p>
+    <p>	MIB3_RQ_SYS_WEB178	The web engine must support a full UI implementation for embedded and external applications in HTML5, including animations, screen transitions, etc. Thus full hardware acceleration for 2D and 3D graphics operations including OpenGL and WebGL is required.	</p>
+    <p>	MIB3_RQ_SYS_WEB4	Related Documents	</p>
+    <p>	MIB3_RQ_SYS_WEB198	"WebApp Interface Architecture - Web Engine and JavaScript Engine Integration
+        <br>
+        \EEFH\MIB-Headunit-HMI\5_Spezifikation\59_Sonstige\594_Konzepte\5942_Online\Browser\EE_MOD_WebApp_Interface_Architec.pdf
+        V08F (Doris Version 1)
+        https://dorisappl.wob.vw.vwg/jctdorisb2x/doris/publicdocuments/50199462?htmlKey=UMqkqApPpf"	</p>
+    <p>	MIB3_RQ_SYS_WEB6	History of Change	</p>
+    <p>	MIB3_RQ_SYS_WEB7	Initial Version (created all chapters)	</p>
+    <p>	MIB3_RQ_SYS_WEB8	Requirements	</p>
+    <p>	MIB3_RQ_SYS_WEB31	Web Standards	</p>
+    <p>	MIB3_RQ_SYS_WEB32	HTTP	</p>
+    <p>	MIB3_RQ_SYS_WEB33	The web engine must support HTTP 1.0 (RFC 1945).	</p>
+    <p>	MIB3_RQ_SYS_WEB34	The web engine must support HTTP 1.1 (RFCs 7230-7237).	</p>
+    <p>	MIB3_RQ_SYS_WEB35	The web engine must initiate connections using HTTP 1.1 requests.	</p>
+    <p>	MIB3_RQ_SYS_WEB36	The web engine must support HTTP compression by receiving gzip compressed content (Accept-Encoding: gzip, Content-Encoding: gzip).	</p>
+    <p>	MIB3_RQ_SYS_WEB37	The web engine shall support HTTP 1.0 persistent connections (Connection: Keep-Alive)	</p>
+    <p>	MIB3_RQ_SYS_WEB38	The web engine shall support HTTP 1.1 persistent connections (without explicit Keep-Alive header)	</p>
+    <p>	MIB3_RQ_SYS_WEB39	The web engine must support cache control via the Expires header	</p>
+    <p>	MIB3_RQ_SYS_WEB40	The web engine must support cache control via the Cache-Control: max-age header	</p>
+    <p>	MIB3_RQ_SYS_WEB41	The web engine must support cache control via Last-Modified/If-Modified-Since headers	</p>
+    <p>	MIB3_RQ_SYS_WEB42	The web engine must support cache control via Etag/If-None-Match headers	</p>
+    <p>	MIB3_RQ_SYS_WEB43	The web engine must be able to add custom http headers to each outgoing request.	</p>
+    <p>	MIB3_RQ_SYS_WEB44	The web engine must add an http header accept-language to each outgoing request. The accept-language is set via the web engine's command and configuration interface.	</p>
+    <p>	MIB3_RQ_SYS_WEB45	As long as no accept-language has been set by the system the web engine shall use “en_GB” as default value.	</p>
+    <p>	MIB3_RQ_SYS_WEB46	Notice the non-standard locale format with '_' instead of '-'. This is intentional for historic reasons.	</p>
+    <p>	MIB3_RQ_SYS_WEB47	The web engine must add an http header X-XRes to each outgoing request. X-Xres shall be the horizontal size in pixels of the requesting web engine instance's displayed area.	</p>
+    <p>	MIB3_RQ_SYS_WEB48	The web engine must add an http header X-YRes to each outgoing request. X-Yres shall be the vertical size in pixels of the requesting web engine instance's displayed area.	</p>
+    <p>	MIB3_RQ_SYS_WEB49	The web engine must add an http header X-Skin to each outgoing request. X-Skin shall be the  currently active HMI-skin and its value is supplied to the web engine via its  command and configuration interface.	</p>
+    <p>	MIB3_RQ_SYS_WEB50	The web engine must add an http header X-Color to each outgoing request. X-Color shall be the  currently active HMI-skin and its value is supplied to the web engine via its  command and configuration interface.	</p>
+    <p>	MIB3_RQ_SYS_WEB51	The web engine must not accept cookies.	</p>
+    <p>	MIB3_RQ_SYS_WEB52	The web engine shall not display the content of error responses (HTTP status code other than 200 OK). Instead an empty black page shall be displayed.	</p>
+    <p>	MIB3_RQ_SYS_WEB53	The web engine shall not forward the title of error responses (HTTP status code other than 200 OK) via its configuration and comtrol interface. Instead an empty string shall be forwarded as title.	</p>
+    <p>	MIB3_RQ_SYS_WEB54	HTML	</p>
+    <p>	MIB3_RQ_SYS_WEB55	The web engine must support HTML 4.01 (http://www.w3.org/TR/1999/REC-html401-19991224) completely.	</p>
+    <p>	MIB3_RQ_SYS_WEB56	The web engine must support HTML 5 (http://www.w3.org/TR/2014/REC-html5-20141028/) to an extent that is on a par with contemporary contenders like Chrome 47.	</p>
+    <p>	MIB3_RQ_SYS_WEB57	Part of the supplier deliveries shall be a detailed documentation of the web engine's HTML 5 compliance.	</p>
+    <p>	MIB3_RQ_SYS_WEB179	The web engine must support canvas elements.	</p>
+    <p>	MIB3_RQ_SYS_WEB180	"The web engine must provide navigator object to apps for
+    <br>- Geolocation
+    <br>- Connection
+    <br>- onLine
+    <br>- Language/Languages
+    <br>- Permissions
+    <br>- ServiceWorkers
+    <br>- UserAgent"	</p>
+    <p>	MIB3_RQ_SYS_WEB58	DOM	</p>
+    <p>	MIB3_RQ_SYS_WEB59	The web engine shall support DOM Level 3 (http://www.w3.org/TR/2004/REC-DOM-Level-3-Core-20040407).	</p>
+    <p>	MIB3_RQ_SYS_WEB60	CSS	</p>
+    <p>	MIB3_RQ_SYS_WEB61	The web engine must support CSS 2.1 (http://www.w3.org/TR/2011/REC-CSS2-20110607) completely.	</p>
+    <p>	MIB3_RQ_SYS_WEB62	The web engine must support CSS 3 to an extent that is on a par with contemporary contenders like Chrome 47.	</p>
+    <p>	MIB3_RQ_SYS_WEB63	Part of the supplier deliveries shall be a detailed documentation of the web engine's CSS 3 compliance.	</p>
+    <p>	MIB3_RQ_SYS_WEB181	Translations and transistions with 2D/3D accelerated graphics is required.	</p>
+    <p>	MIB3_RQ_SYS_WEB182	The web engine must support media selectors as basis for responsive design.	</p>
+    <p>	MIB3_RQ_SYS_WEB183	Support for CSS variables and functions (via CSS pre-processor, e.g. SASS).	</p>
+    <p>	MIB3_RQ_SYS_WEB64	JavaScript	</p>
+    <p>	MIB3_RQ_SYS_WEB65	The web engine must support JavaScript as specified in ECMA-262, edition 6.	</p>
+    <p>	MIB3_RQ_SYS_WEB177	The standard ECMA-262 edition 6, also known as ES6, was finalized in June 2015.	</p>
+    <p>	MIB3_RQ_SYS_WEB184	Pre- and just-in-time compilation for JavaScript is required.	</p>
+    <p>	MIB3_RQ_SYS_WEB66	The web engine must support JavaScript to an extent that is on a par with contemporary contenders like the V8 JavaScript engine V4.2.	</p>
+    <p>	MIB3_RQ_SYS_WEB67	Part of the supplier deliveries shall be a detailed documentation of the web engine's JavaScript compliance. 	</p>
+    <p>	MIB3_RQ_SYS_WEB68	The web engine's JavaScript performance must be on a par with contemporary contenders like the V8 JavaScript engine V4.2.	</p>
+    <p>	MIB3_RQ_SYS_WEB69	JavaScript benchmark suites like Octane 2.0 will be used to evaluate the web engine's JavaScript performance against comparable hardware running contemporary browsers.	</p>
+    <p>	MIB3_RQ_SYS_WEB70	Web APIs	</p>
+    <p>	MIB3_RQ_SYS_WEB71	A number of Web APIs that are not part of the HTML 4.01 or HTML 5 specifications are required as well.	</p>
+    <p>	MIB3_RQ_SYS_WEB72	The web engine must support the W3C Touch Interface (http://www.w3.org/TR/touch-events/HYPERLINK \h ).	</p>
+    <p>	MIB3_RQ_SYS_WEB73	The web engine must support the XMLHttpRequest function (http://www.w3.org/TR/XMLHttpRequest/HYPERLINK \h ).	</p>
+    <p>	MIB3_RQ_SYS_WEB74	The web engine must allow XMLHttpRequest connections to any host and domain even when the request originates from locally stored content (i.e. from a file: URL).	</p>
+    <p>	MIB3_RQ_SYS_WEB75	Whether any XMLHttpRequests connections from local content are allowed must be configurable at runtime.	</p>
+    <p>	MIB3_RQ_SYS_WEB76	The web engine must allow XMLHttpRequest connections to hosts and domains different from the domain from which the content was loaded that makes the request (disabled same origin policy).	</p>
+    <p>	MIB3_RQ_SYS_WEB77	Whether the same origin policy for XMLHttpRequests is disabled or active must be configurable at runtime.	</p>
+    <p>	MIB3_RQ_SYS_WEB78	The web engine must support WebSockets (RFC 6455).	</p>
+    <p>	MIB3_RQ_SYS_WEB79	WebSockets must be able to interact with local servers (i.e. on localhost and 127.0.0.1).	</p>
+    <p>	MIB3_RQ_SYS_WEB80	WebSockets must be able to interact with remote servers.	</p>
+    <p>	MIB3_RQ_SYS_WEB81	WebSockets must support unprotected (ws:) connections.	</p>
+    <p>	MIB3_RQ_SYS_WEB82	WebSockets must support protected (wss:) connections.	</p>
+    <p>	MIB3_RQ_SYS_WEB83	WebSockets must support WebSocket protocol version 13.	</p>
+    <p>	MIB3_RQ_SYS_WEB84	WebSockets should support WebSocket protocols specified after version 13.	</p>
+    <p>	MIB3_RQ_SYS_WEB85	The web engine must support W3C WebWorkers (http://dev.w3.org/html5/workers/)	</p>
+    <p>	MIB3_RQ_SYS_WEB86	The web engine must support WebStorage (http://www.w3.org/TR/webstorage/).	</p>
+    <p>	MIB3_RQ_SYS_WEB87	The web engine must support volatile WebStorage (sessionStorage). 	</p>
+    <p>	MIB3_RQ_SYS_WEB88	The web engine must support persistent WebStorage (localStorage).	</p>
+    <p>	MIB3_RQ_SYS_WEB185	"The web engine must support WebStorage (indexedDB)."	</p>
+    <p>	MIB3_RQ_SYS_WEB89	The web engine shall support SVG Tiny version 1.2 (http://www.w3.org/TR/SVGTiny12/) or above.	</p>
+    <p>	MIB3_RQ_SYS_WEB186	The web engine must support service workers, web workers and threading.	</p>
+    <p>	MIB3_RQ_SYS_WEB90	Supported Content	</p>
+    <p>	MIB3_RQ_SYS_WEB91	Text	</p>
+    <p>	MIB3_RQ_SYS_WEB92	The web engine shall support UTF-8 character encoding.	</p>
+    <p>	MIB3_RQ_SYS_WEB93	The web engine should support other character encodings than UTF-8.	</p>
+    <p>	MIB3_RQ_SYS_WEB94	The supplier shall deliver a specification which character encodings are supported.	</p>
+    <p>	MIB3_RQ_SYS_WEB95	The web engine shall use and support the same fonts as the system's HMI.	</p>
+    <p>	MIB3_RQ_SYS_WEB96	The system fonts are delivered as part of the HMI deliveries and must be integrated by the supplier in a way that ensures that HMI and web engine are always using the same fonts.	</p>
+    <p>	MIB3_RQ_SYS_WEB97	The web engine shall support complex text rendering.	</p>
+    <p>	MIB3_RQ_SYS_WEB98	Complex text rendering is needed to correctly display scripts like Arabic	</p>
+    <p>	MIB3_RQ_SYS_WEB99	The web engine shall support correct rendering of Arabic script.	</p>
+    <p>	MIB3_RQ_SYS_WEB187	Font render engine for high-quality-fonts especially on retina displays with full support for <bdi> element (bi-directional text).	</p>
+    <p>	MIB3_RQ_SYS_WEB100	Images	</p>
+    <p>	MIB3_RQ_SYS_WEB101	The web engine must support images in PNG format.	</p>
+    <p>	MIB3_RQ_SYS_WEB102	The web engine must support images in PNG format with transparency.	</p>
+    <p>	MIB3_RQ_SYS_WEB103	The web engine must support images in JPEG format.	</p>
+    <p>	MIB3_RQ_SYS_WEB104	The web engine must support images in progressive JPEG format.	</p>
+    <p>	MIB3_RQ_SYS_WEB105	The web engine must support images in GIF format.	</p>
+    <p>	MIB3_RQ_SYS_WEB106	The web engine must support images in grey scale GIF format.	</p>
+    <p>	MIB3_RQ_SYS_WEB107	The web engine must support images in GIF with transparency format.	</p>
+    <p>	MIB3_RQ_SYS_WEB108	The web engine must support images in animated GIF format.	</p>
+    <p>	MIB3_RQ_SYS_WEB109	The image placeholder that is shown while loading an image shall be configurable during development.	</p>
+    <p>	MIB3_RQ_SYS_WEB110	The image placeholder that is shown for broken images shall be configurable during development.	</p>
+    <p>	MIB3_RQ_SYS_WEB111	The default image placeholder shall be a 100% transparent and thus invisible 1px by 1px bitmap.	</p>
+    <p>	MIB3_RQ_SYS_WEB188	The web engine must supprt SVG (scalable vector graphics).	</p>
+    <p>	MIB3_RQ_SYS_WEB112	Audio	</p>
+    <p>	MIB3_RQ_SYS_WEB113	The HTML5 audio element  must support PCM audio in a WAV container.	</p>
+    <p>	MIB3_RQ_SYS_WEB114	The HTML5 audio element  must support MP3 audio.	</p>
+    <p>	MIB3_RQ_SYS_WEB115	The  HTML5 audio element  must support AAC audio in an MP4 container.	</p>
+    <p>	MIB3_RQ_SYS_WEB116	The  HTML5 audio element  must support AAC audio in an ADTS container.	</p>
+    <p>	MIB3_RQ_SYS_WEB117	The  HTML5 audio element  must support Vorbis audio in an Ogg container.	</p>
+    <p>	MIB3_RQ_SYS_WEB118	The  HTML5 audio element  must support Vorbis audio in a WebM container.	</p>
+    <p>	MIB3_RQ_SYS_WEB119	The  HTML5 audio element  must support  Opus audio in a WebM container.	</p>
+    <p>	MIB3_RQ_SYS_WEB189	Microformats	</p>
+    <p>	MIB3_RQ_SYS_WEB190	Microformats are patterns in HTML to represent pieces of commonly used informations in web apps, e.g. addresses, phone numbers, cal items etc. 	</p>
+    <p>	MIB3_RQ_SYS_WEB191	Handler to recognize phone number formats and trigger outgoing calls or save to address book.	</p>
+    <p>	MIB3_RQ_SYS_WEB192	Handler for map URL's to optionally forward to built-in navigation.	</p>
+    <p>	MIB3_RQ_SYS_WEB120	Configuration and Control	</p>
+    <p>	MIB3_RQ_SYS_WEB121	The web engine must offer a configuration and control interface to the system.	</p>
+    <p>	MIB3_RQ_SYS_WEB122	Traditionally this interface was DSIBrowser. But this specification does not mandate system architecture. Refer to the system architecture specification for further requirements.	</p>
+    <p>	MIB3_RQ_SYS_WEB123	The complete functionality to be offered by the web engine's configuration and control interface is detailed in an own specification.	</p>
+    <p>	MIB3_RQ_SYS_WEB124	The configuration and control interface must offer a function to load and render content from given URLs into the web engine.	</p>
+    <p>	MIB3_RQ_SYS_WEB125	The configuration and control interface must offer a function for resetting all persisted data and settings to their factory defaults.	</p>
+    <p>	MIB3_RQ_SYS_WEB126	The configuration and control interface must offer functions to configure the web engine's behaviour.	</p>
+    <p>	MIB3_RQ_SYS_WEB127	Configuration parameters include the accept-language, the size of the rendering area.	</p>
+    <p>	MIB3_RQ_SYS_WEB128	The configuration and control interface must inform the system about the status of the web engine.	</p>
+    <p>	MIB3_RQ_SYS_WEB129	Status includes state information like loading, the current content's title, the content height and width, the current scroll position etc.	</p>
+    <p>	MIB3_RQ_SYS_WEB130	The configuration and control interface must inform the system about error condtions.	</p>
+    <p>	MIB3_RQ_SYS_WEB131	Error conditions include all received http status codes, timeouts, lack of memory etc.	</p>
+    <p>	MIB3_RQ_SYS_WEB132	The HTML 5 History API shall be integrated with the system's HMI.	</p>
+    <p>	MIB3_RQ_SYS_WEB133	The History API allows to set the target of the browser's “back” function. This is needed for content which does not always load new pages but just updates its display, like showing the weather for today/tomorrow/next days by just making different elements visible. Through the history API the back button could retrace these changes backwards without having to load new pages for each button press.	</p>
+    <p>	MIB3_RQ_SYS_WEB134	The web engine shall use an HMI text speller that is provided through the command and control interface when an input object with type text gets activated.	</p>
+    <p>	MIB3_RQ_SYS_WEB135	The web engine must receive touch event data from the system and forward them to the content conforming to the W3C touch API.	</p>
+    <p>	MIB3_RQ_SYS_WEB136	Touch events not consumed by JavaScript shall be interpreted into click, drag and scroll events by the web engine.	</p>
+    <p>	MIB3_RQ_SYS_WEB137	The exact touch handling and interpretation will be specified in an own document.	</p>
+    <p>	MIB3_RQ_SYS_WEB138	The web engine must receive mouse events from the system and forward them to the content conforming to the W3C UI Events API (http://www.w3.org/TR/2015/WD-uievents-20150428/).	</p>
+    <p>	MIB3_RQ_SYS_WEB139	The mouse wheel and button events shall represent a rotary encoder if one is present in the system.	</p>
+    <p>	MIB3_RQ_SYS_WEB140	Mouse events not consumed by JavaScript shall be interpreted into click events by the web engine.	</p>
+    <p>	MIB3_RQ_SYS_WEB141	Mouse wheel events not consumed by JavaScript shall be interpreted into focus next/focus previous events by the web engine.	</p>
+    <p>	MIB3_RQ_SYS_WEB142	The touch event interpreter of the web engine shall implement accelerated soft scrolling including flicking when scroll actions are recognized.	</p>
+    <p>	MIB3_RQ_SYS_WEB143	The ballistics for the accelerated soft scrolling shall be defined in cooperation with HMI specialists during develoment.	</p>
+    <p>	MIB3_RQ_SYS_WEB193	The web engine must support HID support for touch and other discrete HMI elements via a unified input handler and gesture recognizer (e.g. similar to hammer.js functionality).	</p>
+    <p>	MIB3_RQ_SYS_WEB144	System Integration	</p>
+    <p>	MIB3_RQ_SYS_WEB145	The web engine must utilize Core Service Commnunications for its http connections.	</p>
+    <p>	MIB3_RQ_SYS_WEB146	The web engine must allow using the system interface which is defined in an own specification.	</p>
+    <p>	MIB3_RQ_SYS_WEB147	The system interface must offer a function to obtain a geo location from the user by employing the navigation domain's location selector.	</p>
+    <p>	MIB3_RQ_SYS_WEB148	The request for a geo location must allow to call a location speller that returns with a result when a city has been selected.	</p>
+    <p>	MIB3_RQ_SYS_WEB149	The request for a geo location must allow to call a location speller that allows to select a complete address.	</p>
+    <p>	MIB3_RQ_SYS_WEB150	The web engine must integrate the HTML5 audio element into the infotainment audio system in order to play back audio content and streams through the system's speakers.	</p>
+    <p>	MIB3_RQ_SYS_WEB151	Integration of the web engine audio with the entertainment audio shall be specified further as part of the entertainment specifications.	</p>
+    <p>	MIB3_RQ_SYS_WEB194	Audio and video tags fully integrated with main unit media engine, video playback either scalable off-screen buffer (as input to window compositor) or in full-screen mode.	</p>
+    <p>	MIB3_RQ_SYS_WEB152	When displayed without having rendered any content the web engine must display a blank black area.	</p>
+    <p>	MIB3_RQ_SYS_WEB153	The default colors for content displayed by the web engine shall be white foreground and black background.	</p>
+    <p>	MIB3_RQ_SYS_WEB154	The default font and font-size for content displayed by the web engine shall be configurable and defined during development.	</p>
+    <p>	MIB3_RQ_SYS_WEB155	The web engine should support a locally stored default CSS file that is loaded before the actual content gets loaded.	</p>
+    <p>	MIB3_RQ_SYS_WEB156	JavaScript date and time functions when called inside the web engine must return the actual date, time and timezone.	</p>
+    <p>	MIB3_RQ_SYS_WEB195	Support for locally served JavaScript libs is required.	</p>
+    <p>	MIB3_RQ_SYS_WEB157	Characteristics	</p>
+    <p>	MIB3_RQ_SYS_WEB158	Instances	</p>
+    <p>	MIB3_RQ_SYS_WEB159	The web engine must support no less than 15 parallel instances.	</p>
+    <p>	MIB3_RQ_SYS_WEB160	An instance can be compared to a browser tab in desktop browsers. But at least some of them must act like windows in a desktop system do and be able to be displayed and active side by side at the same time.	</p>
+    <p>	MIB3_RQ_SYS_WEB161	Each instance of the web engine must be able to manage its own content.	</p>
+    <p>	MIB3_RQ_SYS_WEB162	Each instance of the web engine must be able to be configured to an individual width and height of its displayed area in pixels.	</p>
+    <p>	MIB3_RQ_SYS_WEB163	At least 15 of the web engine instances must be able to be displayed and active on the system screen simultaneously.	</p>
+    <p>	MIB3_RQ_SYS_WEB196	Each application client executes within its own webview (and process).	</p>
+    <p>	MIB3_RQ_SYS_WEB197	A window management component is required to switch between webviews.	</p>
+    <p>	MIB3_RQ_SYS_WEB164	Persistency	</p>
+    <p>	MIB3_RQ_SYS_WEB165	The available size for sessionStorage data shall be no less than 10MBytes (total sum over all origins).	</p>
+    <p>	MIB3_RQ_SYS_WEB166	The available size for persistent  localStorage shall be no less than 100MBytes (total sum over all origins)	</p>
+    <p>	MIB3_RQ_SYS_WEB167	The web engine must have a persistent cache.	</p>
+    <p>	MIB3_RQ_SYS_WEB168	In order to enable HTML 5 Offline Web Applications a persistent cache is mandatory.	</p>
+    <p>	MIB3_RQ_SYS_WEB169	The persistent cache shall be no smaller than 500MBytes.	</p>
+    <p>	MIB3_RQ_SYS_WEB170	The final maximum size of the persistent cache shall be determined in cooperation with the customer's system experts.	</p>
+    <p>	MIB3_RQ_SYS_WEB171	Personalisation	</p>
+    <p>	MIB3_RQ_SYS_WEB172	The web engine shall be integrated with the system's user and personalisation management.	</p>
+    <p>	MIB3_RQ_SYS_WEB173	The web engine shall persist data like web storage on a per user basis.	</p>
+    <p>	MIB3_RQ_SYS_WEB174	Updateabilty	</p>
+    <p>	MIB3_RQ_SYS_WEB175	It shall be possible to update the web engine via the system's software update management.	</p>
+    <p>	MIB3_RQ_SYS_WEB176	It shall be possible to update the web engine to a new version without updating the rest of the system around it.	</p>
+    <p>	MIB3_RQ_SYS_WEB22	Appendix	</p>
+    <p>	MIB3_RQ_SYS_WEB23	Abbrevations	</p>
+    <p>	MIB3_RQ_SYS_WEB25	Definitions	</p>
+    <p>	MIB3_RQ_SYS_WEB27	Disclaimer	</p>
+    <p>	MIB3_RQ_SYS_WEB28	"Confidential. All rights reserved. No part of this document may be provided to third parties or reproduced without the prior written consent of the appropriate Volkswagen AG department. This document is available to contracting parties solely via the appropriate Procurement department.
+    <br>The English translation is believed to be accurate. In case of discrepancies, the German version is alone authoritative and controlling.
+    <br>© Volkswagen AG"	</p>
+
+  </div></div>
+
+</body>
+</html>

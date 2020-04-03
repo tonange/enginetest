@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>audio stream</title>
+
+  <style>
+    @font-face {
+      font-family: 'OpenSansLight';
+      src: url('../font/OpenSans-Light.ttf') format('truetype');
+    }
+    body {
+      margin: 0px;
+      font-family: OpenSansLight, sans-serif;
+      font-size: 20px;
+      background-color: #000;
+      color: #fff;
+      background-image:url("media/Braun_SK_2_Radio.jpg");
+      background-repeat: no-repeat;
+    }
+    p {
+      margin: 30px 30px;
+    }
+  </style>
+
+  <script>
+
+  function log() {
+    var args = Array.prototype.slice.call(arguments);
+    for (var i=0; i<args.length; i++) {
+      if (typeof args[i] === 'string' || args[i] instanceof String) {
+        // already a string: don't touch it
+      } else {
+        try {
+          args[i] = JSON.stringify(args[i]);
+        } catch(err) {
+          args[i] = args[i].toString();
+        }
+      }
+    }
+    var today = new Date().toISOString().slice(11, 23);
+    var now =  '[' + today + ']';
+    var msg = {
+      source: 'enginetest',
+      severity: 5,
+      timestamp: now,
+      message: args.join(' ')
+    };
+    console.log(JSON.stringify(msg));
+  }
+
+  function init() {
+    log("audio stream: init");
+    player = document.getElementById('player');
+    if (player) {
+      log("audio stream: play");
+      player.play();
+    }
+  };
+
+  /**
+    get startet when loaded
+  **/
+  window.addEventListener('load', init, false);
+
+  </script>
+
+</head>
+<body>
+
+  <p>
+    nothing to see here, just listen to the radio...
+  </p>
+
+  <audio id="player" src="http://ndr-ndrinfo-niedersachsen.cast.addradio.de/ndr/ndrinfo/niedersachsen/mp3/128/stream.mp3"> </audio>
+
+</body>
+</html>

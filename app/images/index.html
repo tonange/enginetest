@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Images</title>
+
+  <style>
+    @font-face {
+      font-family: 'OpenSansLight';
+      src: url('../font/OpenSans-Light.ttf') format('truetype');
+    }
+    body {
+      margin: 0px;
+      font-family: OpenSansLight, sans-serif;
+      font-size: 20px;
+      background-color: #000;
+      color: #fff;
+      line-height: 44px;
+    }
+    p {
+      margin-left: 20px;
+      margin-top: 20px;
+    }
+    p.links {
+      line-height: 2.5;
+    }
+    a {
+      text-decoration: none;
+      color: white;
+      margin: 5px;
+      white-space: nowrap;
+    }
+    .button {
+      padding: 5px 15px;
+      border: 2px solid #fff;
+      border-radius: 5px;
+    }
+    .border {
+      border: 2px solid #fff;
+      border-radius: 5px;
+    }
+    .white {
+      background-color: white;
+    }
+    .green {
+      color: #5f5;
+      border-color: #5f5;
+    }
+  </style>
+
+  <script src="../rsi/script/eventEmitter/EventEmitter.js"></script>
+  <script src="../rsi/script/viwiclient.js"></script>
+  <script src="../script/housekeeping.js"></script>
+
+  <script language="javascript" type="text/javascript">
+    function goHome() {
+      location.href = document.referrer;
+    }
+    var w = document.documentElement.clientWidth
+        || document.body.clientWidth;
+
+    var h = document.documentElement.clientHeight
+        || document.body.clientHeight;
+    function init() {
+      var runbox = document.getElementById('runbox');
+      runbox.style.width = (w - 210) + 'px';
+      runbox.style.height = (h - 20) + 'px';
+
+      // web app housekeeping
+      var url = new URL(document.referrer);
+      var engineInstanceUri = url.searchParams.get('engineinstanceURI');
+      if (!engineInstanceUri) {
+        engineInstanceUri = url.searchParams.get('engineInstanceURI');
+      }
+      // ICAS3: --rsiRegistryURI=http://[::1]:80
+      var registry = url.searchParams.get('rsiRegistryURI');
+      if (!registry) {
+        // default
+        registry = 'http://127.0.0.1:443';
+      }
+      // target simulator trumps all
+      var viwi_port = url.searchParams.get('VIWI_PORT');
+			if (viwi_port) {
+				registry = 'http://127.0.0.1:' + viwi_port;
+			}
+      if (engineInstanceUri) {
+        var housekeeping = new Housekeeping('enginetest', engineInstanceUri, registry);
+        housekeeping.subscribeEngineState();
+      }
+    };
+    /**
+      get startet when loaded
+    **/
+    window.addEventListener('load', init, false);
+
+	</script>
+
+</head>
+<body>
+
+<iframe style="position:absolute;left:200px;top:10px;"
+   class="border"
+   src="img/formats.png" name="runbox" id="runbox">
+   <p>iframes are not supported by your browser.</p>
+</iframe><br />
+
+<div style="position:fixed;top:10px;left:10px;width:180px;">
+
+  <p>
+  <br><a class="button green" href="#" onclick="goHome();return false;">home</a><br>
+  </p>
+
+  <a href="brokenimg.html" target="runbox">broken img</a>
+
+  <a href="img/carnet.png" target="runbox">png non-transp.</a>
+
+  <a href="img/carnet-transparent.png" target="runbox">png transparent</a>
+
+  <a href="img/carnetapp.gif" target="runbox">gif</a><br>
+
+  <a href="img/carnet-transparent.gif" target="runbox">gif transparent</a>
+
+  <a href="img/carnetapp_grey.gif" target="runbox">gif grey scale</a>
+
+  <a href="img/Opti20animated.gif" target="runbox">gif animated</a>
+
+  <a href="img/carnetapp.jpg" target="runbox">jpeg</a>
+
+  <a href="img/mand_prgrsv.jpg" target="runbox">jpeg progressive</a>
+
+  <!-- https://www.w3schools.com/graphics/svg_examples.asp -->
+
+  <a href="svg.html" target="runbox">svg</a>
+  <a href="svg_filter.html" target="runbox">svg filter</a>
+  <a href="svg_anim.html" target="runbox">svg animated</a>
+
+
+</div>
+
+</body>
+</html>

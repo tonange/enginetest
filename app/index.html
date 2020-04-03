@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Main Test Page</title>
+
+  <style>
+    @font-face {
+      font-family: 'OpenSansLight';
+      src: url('font/OpenSans-Light.ttf') format('truetype');
+    }
+    body {
+      margin: 0px;
+      font-family: 'VW Text CarUI', OpenSansLight, 'sans-serif';
+      font-size: 20px;
+      background-color: #000;
+      color: #fff;
+    }
+    p {
+      margin-left: 20px;
+      margin-top: 20px;
+    }
+    p.links {
+      line-height: 3;
+    }
+    a {
+      text-decoration: none;
+      color: white;
+      border: 2px solid #fff;
+      border-radius: 5px;
+      margin: 10px;
+      padding: 5px 15px;
+      white-space: nowrap;
+    }
+    a:visited {
+      color: white;
+    }
+    .green {
+      border-color: rgb(217, 255, 160);
+    }
+    .yellow {
+      border-color: rgb(252, 252, 152);
+    }
+    .orange {
+      border-color: rgb(255, 213, 135);
+    }
+    .logo {
+      position: absolute;
+      bottom: 0px;
+      right: 0px;
+    }
+    #origin {
+      font-size: 18px;
+    }
+    #version {
+      font-size: 18px;
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <p id="clock">System Time: </p>
+
+  <hr>
+
+  <p class="links">
+
+    <a class="green" href="platform/index.html">platform</a>
+
+    <a class="green" href="stress/index.html">stress</a>
+
+    <a class="green" href="touch/touch.html">touch API</a>
+
+    <a class="green" href="scrollbars.html">scroll test</a>
+
+    <a class="green" href="scroll/index.html">smooth scroll</a>
+
+    <a class="green" href="fonts/index.html">fonts and text</a>
+
+    <a class="green" href="characteristics/webstorage.html">web storage</a>
+
+    <a class="green" href="characteristics/indexeddb.html">indexedDB</a>
+
+    <a class="green" href="hmi/speller.html">HMI speller</a>
+
+    <a class="green" href="audio/index.html">HTML5 audio/video</a>
+
+    <a class="green" href="characteristics/index.html">characteristics</a>
+
+    <a class="green" href="images/index.html">images</a>
+
+    <a class="green" href="canvas/index.html">canvas &amp; WebGL</a>
+
+    <a class="green" href="hmi/statusbar.html">status bar</a>
+
+    <a class="green" href="css/index.html">CSS (sort of)</a>
+
+  </p>
+
+  <hr>
+
+  <p class="links">
+
+    <a class="yellow" href="test/index.html">REST client / workers / websockets</a>
+
+    <a class="yellow" href="rsi/pwa.html">PWA stuff</a>
+
+    <a class="yellow" href="special/index.html">special responses</a>
+
+    <a class="yellow" href="http/index.html">http (caching etc.)</a>
+
+    <a class="yellow" href="rsi/index.html">RSI clients&amp;servers</a>
+
+    <a class="yellow" href="sqlite/index.html">SQLite3</a>
+
+    <a class="yellow" href="jsengine/characteristics.html">JSE characteristics</a>
+
+    <a class="yellow" href="rsi/interface.html">system interface</a>
+
+    <a class="yellow" href="#" onclick="redirect2http(); return false;">local http</a>
+
+    <!--a class="yellow" href="#" onclick="redirect2https(); return false;">local https</a-->
+
+  </p>
+
+  <hr>
+
+  <p class="links">
+
+    <a class="orange" href="online/index.html">online</a>
+
+    <a class="orange" href="online/certs.html">certificates</a>
+
+    <a class="orange" href="jsengine/index.html">JS Engine tests</a>
+
+  </p>
+
+  <hr>
+
+  <p id="origin">page origin: </p>
+  <p id="version">page origin: </p>
+
+  <img id="logo" class="logo"  
+       src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==">
+
+  <script src="rsi/script/eventEmitter/EventEmitter.js"></script>
+  <script src="rsi/script/viwiclient.js"></script>
+  <script src="script/housekeeping.js"></script>
+
+  <script>
+
+    var d = new Date();
+    log(d.toISOString() + ': no event (code in head)');
+
+    var housekeeping;
+
+    function init() {
+      var d = new Date();
+      log(d.toISOString() + ': event: window.load');
+
+      // web app housekeeping
+      var url = new URL(window.location.href);
+      var engineInstanceUri = url.searchParams.get('engineinstanceURI');
+      if (!engineInstanceUri) {
+        engineInstanceUri = url.searchParams.get('engineInstanceURI');
+      }
+      // ICAS3: --rsiRegistryURI=http://[::1]:80
+      var registry = url.searchParams.get('rsiRegistryURI');
+      if (!registry) {
+        // default
+        registry = 'http://127.0.0.1:443';
+      }
+      // target simulator trumps all
+      var viwi_port = url.searchParams.get('VIWI_PORT');
+			if (viwi_port) {
+				registry = 'http://127.0.0.1:' + viwi_port;
+			}
+      log('using registry at ' + registry);
+      if (engineInstanceUri) {
+        housekeeping = new Housekeeping('enginetest.housekeeping', engineInstanceUri, registry);
+        housekeeping.setRunning();
+        setTimeout(function() {
+          housekeeping.setStatusbar(false);
+          setTimeout(function() {
+            housekeeping.setNHTSA(false);
+          }, 500);
+        }, 500);
+      }
+      // background
+      var bgcolor = url.searchParams.get('bgcolor');
+      if (bgcolor) {
+        document.body.style.background = bgcolor;
+      }
+
+      // audio last mode: check for uri parameter audioLastMode=true and start audio if found
+      if (url.searchParams.has('audioLastMode')) {
+        var audioLastMode = url.searchParams.get('audioLastMode');
+        log('audioLastMode parameter found, value:', audioLastMode);
+        if (audioLastMode == 'true') {
+          log('redirect to audio page and start playback');
+          // give housekeeping a moment to set runState:
+          setTimeout(function() {
+            location.href = 'audio/index.html';
+          }, 500);
+        }
+      }
+      // /audio last mode
+
+      setTimeout(function() {
+        // clock
+        setInterval(function() {
+          var d = new Date();
+          document.getElementById("clock").innerHTML = "System Time: " + d.toString();
+        }, 500);
+
+        // origin
+        var url = new URL(window.location.href);
+        log('window.location.href: ' + window.location.href);
+        var origin = document.getElementById("origin");
+        var version = document.getElementById("version");
+        log('origin: ' + url.origin);
+        log('params: ' + url.searchParams);
+        origin.innerHTML = "origin: " + url.origin + "<br>" +
+                            "parameters: " + url.searchParams;
+        version.innerHTML = "version: b13525e, Tue Oct  8 18:11:25 CEST 2019";
+        lazyLoad();
+      });
+    }
+
+    function lazyLoad() {
+      var logo = document.getElementById('logo');
+      if (logo) {
+        logo.addEventListener('load', function() {
+          var d = new Date();
+          log(d.toISOString() + ': event: logo.onload');
+        });
+        logo.src = 'img/mechanic_72.png';
+      }
+    }
+
+    function redirect2http() {
+      var url = new URL(window.location.href);
+      var httpuri = 'http://' + url.hostname + ':48710/app/index.html?' + url.searchParams + '&bgcolor=darkred';
+      log('redirect2http', httpuri);
+      window.location.href = httpuri;
+    }
+
+    function redirect2https() {
+      var url = new URL(window.location.href);
+      var httpsuri = 'https://' + url.hostname + ':48713/app/index.html?' + url.searchParams + '&bgcolor=darkgreen';
+      log('redirect2https', httpsuri);
+      window.location.href = httpsuri;
+    }
+
+    function showStatusBarPage() {
+      housekeeping.setStatusbar(true);
+      // just in case:
+      setTimeout(function() {
+        location.href = 'hmi/statusbar.html';
+      }, 100);
+    }
+
+    function log() {
+      var args = Array.prototype.slice.call(arguments);
+      for (var i=0; i<args.length; i++) {
+        if (typeof args[i] === 'string' || args[i] instanceof String) {
+          // already a string: don't touch it
+        } else {
+          try {
+            args[i] = JSON.stringify(args[i]);
+          } catch(err) {
+            args[i] = args[i].toString();
+          }
+        }
+      }
+      var today = new Date().toISOString().slice(11, 23);
+	    var now =  '[' + today + ']';
+      var msg = {
+        source: 'enginetest.main',
+        severity: 5,
+        timestamp: now,
+        message: args.join(' ')
+      };
+      console.log(JSON.stringify(msg));
+    }
+
+    // Test
+    document.addEventListener('DOMContentLoaded', function () {
+      var d = new Date();
+      log(d.toISOString() + ': event: document.DOMContentLoaded');
+    });
+
+    /**
+     get startet when loaded
+    **/
+    window.addEventListener('load', init, false);
+
+  </script>
+     
+</body>
+</html>

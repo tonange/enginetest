@@ -1,0 +1,10 @@
+{
+    "spec_dir": "spec",
+    "spec_files": [
+        "hello.js",
+        "remoteRESTapp.js",
+        "failed.js"
+    ],
+    "helpers": [
+    ]
+}

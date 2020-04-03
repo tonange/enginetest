@@ -1,0 +1,62 @@
+General
+Complete name                            : /Users/ecki/Documents/workspace/mod/enginetest/main/audio/media/apollo11.mp4
+Format                                   : MPEG-4
+Format profile                           : Base Media / Version 2
+Codec ID                                 : mp42 (mp42/mp41/isom/avc1)
+File size                                : 41.9 MiB
+Duration                                 : 2mn 17s
+Overall bit rate mode                    : Variable
+Overall bit rate                         : 2 558 Kbps
+Encoded date                             : UTC 2016-08-11 19:27:04
+Tagged date                              : UTC 2016-08-11 19:27:04
+
+Video
+ID                                       : 1
+Format                                   : AVC
+Format/Info                              : Advanced Video Codec
+Format profile                           : High@L3.2
+Format settings                          : CABAC / 5 Ref Frames
+Format settings, CABAC                   : Yes
+Format settings, ReFrames                : 5 frames
+Codec ID                                 : avc1
+Codec ID/Info                            : Advanced Video Coding
+Duration                                 : 2mn 17s
+Bit rate                                 : 2 297 Kbps
+Width                                    : 1 280 pixels
+Height                                   : 720 pixels
+Display aspect ratio                     : 16:9
+Frame rate mode                          : Constant
+Frame rate                               : 30.000 fps
+Color space                              : YUV
+Chroma subsampling                       : 4:2:0
+Bit depth                                : 8 bits
+Scan type                                : Progressive
+Bits/(Pixel*Frame)                       : 0.083
+Stream size                              : 37.7 MiB (90%)
+Writing library                          : x264 core 148 r10 3f5ed56
+Encoding settings                        : cabac=1 / ref=5 / deblock=1:0:0 / analyse=0x3:0x113 / me=umh / subme=8 / psy=1 / psy_rd=1.00:0.00 / mixed_ref=1 / me_range=16 / chroma_me=1 / trellis=1 / 8x8dct=1 / cqm=0 / deadzone=21,11 / fast_pskip=1 / chroma_qp_offset=-2 / threads=22 / lookahead_threads=3 / sliced_threads=0 / nr=0 / decimate=1 / interlaced=0 / bluray_compat=0 / stitchable=1 / constrained_intra=0 / bframes=3 / b_pyramid=2 / b_adapt=2 / b_bias=0 / direct=3 / weightb=1 / open_gop=0 / weightp=2 / keyint=infinite / keyint_min=30 / scenecut=40 / intra_refresh=0 / rc_lookahead=50 / rc=crf / mbtree=1 / crf=20.0 / qcomp=0.60 / qpmin=5 / qpmax=69 / qpstep=4 / vbv_maxrate=2750 / vbv_bufsize=7500 / crf_max=0.0 / nal_hrd=none / filler=0 / ip_ratio=1.40 / aq=1:1.00
+Encoded date                             : UTC 2016-08-11 19:27:04
+Tagged date                              : UTC 2016-08-11 19:27:04
+Color range                              : Limited
+Color primaries                          : BT.709
+Transfer characteristics                 : BT.709
+Matrix coefficients                      : BT.709
+
+Audio
+ID                                       : 2
+Format                                   : AAC
+Format/Info                              : Advanced Audio Codec
+Format profile                           : LC
+Codec ID                                 : mp4a-40-2
+Duration                                 : 2mn 17s
+Bit rate mode                            : Variable
+Bit rate                                 : 256 Kbps
+Channel(s)                               : 2 channels
+Channel positions                        : Front: L R
+Sampling rate                            : 48.0 KHz
+Frame rate                               : 46.875 fps (1024 SPF)
+Compression mode                         : Lossy
+Stream size                              : 4.20 MiB (10%)
+Encoded date                             : UTC 2016-08-11 19:27:04
+Tagged date                              : UTC 2016-08-11 19:27:04
+

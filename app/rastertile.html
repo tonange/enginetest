@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Raster Tile</title>
+
+  <style>
+    @font-face {
+      font-family: 'OpenSansLight';
+      src: url('font/OpenSans-Light.ttf') format('truetype');
+    }
+    html, body {
+      height: 100%;
+      margin: 0;
+    }
+    body {
+      margin: 0px;
+      font-family: OpenSansLight, sans-serif;
+      font-size: 20px;
+      background-color: #000;
+      color: #fff;
+      background-repeat: repeat;
+      background-image: url(img/rastertile_10x10.png);
+    }
+    #output {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      font-size: 32px;
+      background-color: black;
+    }
+    #frame {
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      border: 10px solid rgba(255, 0, 0, .5);
+    }
+  </style>
+
+  <script src="rsi/script/eventEmitter/EventEmitter.js"></script>
+  <script src="rsi/script/viwiclient.js"></script>
+  <script src="script/housekeeping.js"></script>
+
+  <script>
+
+    /*
+      9,2''
+
+      2x2: 853x543
+      1x1: 363x260
+
+      10''
+
+      2x2: 763x580
+      2x1: 497x580
+      1x1: 497x375
+    */
+
+    function setSize() {
+      // dimensions
+      log('(re-)size to w: ' + window.innerWidth + '  h:' + window.innerHeight);
+      var output = document.getElementById('output');
+      var text = window.innerWidth + 'x' + window.innerHeight + '\n';
+      output.innerHTML = text;
+      document.title = 'Raster Tile ' + window.innerWidth + 'x' + window.innerHeight;
+
+      var frame = document.getElementById('frame');
+      frame.style.minWidth = (window.innerWidth - 20) + 'px';
+      frame.style.minHeight = (window.innerHeight - 20) + 'px';
+    }
+
+    var housekeeping;
+
+    function init() {
+
+      setSize();
+
+      // web app housekeeping
+      var url = new URL(window.location.href);
+      var engineInstanceUri = url.searchParams.get('engineinstanceURI');
+      if (!engineInstanceUri) {
+        engineInstanceUri = url.searchParams.get('engineInstanceURI');
+      }
+      // ICAS3: --rsiRegistryURI=http://[::1]:80
+      var registry = url.searchParams.get('rsiRegistryURI');
+      if (!registry) {
+        // default: MQB 
+        registry = 'http://127.0.0.1:443';
+      }
+      // target simulator trumps all
+      var viwi_port = url.searchParams.get('VIWI_PORT');
+			if (viwi_port) {
+				registry = 'http://127.0.0.1:' + viwi_port;
+			}
+      log('using registry at ' + registry);
+      if (engineInstanceUri) {
+        housekeeping = new Housekeeping('enginetest', engineInstanceUri, registry);
+        housekeeping.setRunning();
+      }
+    }
+
+    function log() {
+      var args = Array.prototype.slice.call(arguments);
+      for (var i=0; i<args.length; i++) {
+        if (typeof args[i] === 'string' || args[i] instanceof String) {
+          // already a string: don't touch it
+        } else {
+          try {
+            args[i] = JSON.stringify(args[i]);
+          } catch(err) {
+            args[i] = args[i].toString();
+          }
+        }
+      }
+      var today = new Date().toISOString().slice(11, 23);
+	    var now =  '[' + today + ']';
+      var msg = {
+        source: 'rastertile',
+        severity: 5,
+        timestamp: now,
+        message: args.join(' ')
+      };
+      console.log(JSON.stringify(msg));
+    }
+    /**
+      get startet when loaded
+    **/
+    window.addEventListener('load', init, false);
+
+  </script>
+
+</head>
+
+<body onresize="setSize()">
+
+  <div id="frame"></div>
+
+  <div id="output"></div>
+
+</body>
+</html>

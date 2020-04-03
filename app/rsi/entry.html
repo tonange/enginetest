@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>RSI entry</title>
+
+  <style>
+    body {
+      margin: 0px;
+      background-color: #000;
+    }
+    #max {
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      width: 100%;
+      height: 100%;
+    }
+    #curlies {
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      width: 200px;
+      height: auto;
+    }
+  </style>
+
+  <script>
+
+    function init() {
+      setTimeout(function() {
+        var curlies = document.getElementById('curlies');
+        var max = document.getElementById('max');
+        var w = max.clientWidth;
+        var h = max.clientHeight;
+        var maxX = w - 200;
+        var maxY = h - 200;
+        var speed = 5;
+        var deltaX = speed * getDirection();
+        var deltaY = speed * getDirection();
+        var x = 0;
+        var y = 0;
+
+        setInterval(function() {
+          while ( x + deltaX > maxX || x + deltaX < 0) {
+            deltaX = speed * getDirection();
+          }
+          while ( y + deltaY > maxY || y + deltaY < 0 ) {
+            deltaY = speed * getDirection();
+          }
+          x += deltaX;
+          y += deltaY;
+          curlies.style.top = y + 'px';
+          curlies.style.left = x + 'px';
+        }, 50);
+      }, 1000);
+    }
+
+    function getDirection() {
+      var rnd = 2 * Math.random();
+      if (rnd < 1) return -1;
+      return 1;
+    }
+
+    /**
+      get startet when loaded
+    **/
+   window.addEventListener('load', init, false);
+
+	</script>
+
+</head>
+<body>
+
+  <div id="max">
+  <img id="curlies" src="img/curlies.png">
+  </div>
+
+</body>
+</html>

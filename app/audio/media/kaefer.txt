@@ -1,0 +1,60 @@
+General
+Complete name                            : /Users/ecki/Documents/workspace/mod/enginetest/main/audio/media/kaefer.mp4
+Format                                   : MPEG-4
+Format profile                           : Base Media / Version 2
+Codec ID                                 : mp42 (isom/mp42)
+File size                                : 1.32 MiB
+Duration                                 : 31s 810ms
+Overall bit rate mode                    : Variable
+Overall bit rate                         : 348 Kbps
+Encoded date                             : UTC 2013-12-13 08:03:08
+Tagged date                              : UTC 2013-12-13 08:03:08
+
+Video
+ID                                       : 1
+Format                                   : AVC
+Format/Info                              : Advanced Video Codec
+Format profile                           : Baseline@L1.3
+Format settings                          : 1 Ref Frames
+Format settings, CABAC                   : No
+Format settings, ReFrames                : 1 frame
+Codec ID                                 : avc1
+Codec ID/Info                            : Advanced Video Coding
+Duration                                 : 31s 740ms
+Source duration                          : 31s 760ms
+Bit rate                                 : 250 Kbps
+Maximum bit rate                         : 517 Kbps
+Width                                    : 352 pixels
+Height                                   : 264 pixels
+Display aspect ratio                     : 4:3
+Frame rate mode                          : Constant
+Frame rate                               : 25.000 fps
+Color space                              : YUV
+Chroma subsampling                       : 4:2:0
+Bit depth                                : 8 bits
+Scan type                                : Progressive
+Bits/(Pixel*Frame)                       : 0.108
+Stream size                              : 969 KiB (72%)
+Source stream size                       : 969 KiB (72%)
+Tagged date                              : UTC 2013-12-13 08:03:09
+
+Audio
+ID                                       : 2
+Format                                   : AAC
+Format/Info                              : Advanced Audio Codec
+Format profile                           : LC
+Codec ID                                 : mp4a-40-2
+Duration                                 : 31s 810ms
+Bit rate mode                            : Variable
+Bit rate                                 : 96.0 Kbps
+Maximum bit rate                         : 103 Kbps
+Channel(s)                               : 2 channels
+Channel positions                        : Front: L R
+Sampling rate                            : 44.1 KHz
+Frame rate                               : 43.066 fps (1024 SPF)
+Compression mode                         : Lossy
+Stream size                              : 373 KiB (28%)
+Title                                    : IsoMedia File Produced by Google, 5-11-2011
+Encoded date                             : UTC 2013-12-13 08:03:08
+Tagged date                              : UTC 2013-12-13 08:03:09
+

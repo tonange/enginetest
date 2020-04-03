@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>touch and drag</title>
+
+  <style>
+    @font-face {
+      font-family: 'OpenSansLight';
+      src: url('../font/OpenSans-Light.ttf') format('truetype');
+    }
+    body {
+      margin: 15px;
+      font-family: OpenSansLight, sans-serif;
+      font-size: 20px;
+      background-color: #000;
+      color: #fff;
+      overflow: hidden;
+    }
+    a {
+      text-decoration: none;
+      color: orange;
+      margin: 10px;
+      white-space: nowrap;
+    }
+    .credit {
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      font-size: 14px;
+    }
+    .box {
+      width: 150px;
+      height: 150px;
+      padding: 10px;
+      border: 1px solid orange;
+      box-sizing: border-box;
+      background: lightyellow;
+      text-align: center;
+      color: black;
+    }
+    #box2 {
+      left: 0px;
+      width: 150px;
+      height: 50px;
+      border: 1px solid orange;
+      border-radius: 25px;
+      box-sizing: border-box;
+      background: lightyellow;
+      position: absolute;
+      padding-top: 7px;
+      box-shadow: 0 0 5px gray;
+      text-align: center;
+      font-size: 24px;
+      color: black;
+
+    }
+    .track {
+      width: 700px;
+      height: 55px;
+      position: relative;
+      overflow: hidden;
+    }
+    .track:after {
+      content: '';
+      display: block;
+      width: 100%;
+      height: 1px;
+      background: white;
+      position: absolute;
+      top: 49%;
+      z-index: -1;
+    }
+
+  </style>
+
+  <script>
+
+  var box2;
+  var boxleft2; // left position of moving box
+  var startx2; // starting x coordinate of touch point
+  var touchobj2 = null // Touch object holder
+
+    function init() {
+      var box1 = document.getElementById('box1');
+      var statusdiv = document.getElementById('statusdiv');
+      var startx = 0;
+      var starty = 0;
+
+      box1.addEventListener('touchstart', function(e){
+          var touchobj = e.changedTouches[0]; // reference first touch point (ie: first finger)
+          startx = parseInt(touchobj.clientX); // get x position of touch point relative to left edge of browser
+          starty = parseInt(touchobj.clientY); // get y position of touch point relative to left edge of browser
+          statusdiv.innerHTML = 'Status: touchstart<br> ClientX: ' + startx + 'px' +
+                                'ClientY: ' + starty + 'px';
+          if(e.cancelable) e.preventDefault();
+      }, false);
+
+      box1.addEventListener('touchmove', function(e){
+          var touchobj = e.changedTouches[0]; // reference first touch point for this event
+          var dist = parseInt(touchobj.clientX) - startx;
+          statusdiv.innerHTML = 'Status: touchmove<br> Horizontal distance traveled: ' + dist + 'px';
+          if(e.cancelable) e.preventDefault();
+      }, false);
+
+      box1.addEventListener('touchend', function(e){
+          var touchobj = e.changedTouches[0]; // reference first touch point for this event
+          statusdiv.innerHTML = 'Status: touchend<br> Resting x coordinate: ' + touchobj.clientX + 'px' +
+          ',  Resting y coordinate: ' + touchobj.clientY + 'px';
+          if(e.cancelable) e.preventDefault();
+      }, false);
+
+      box2 = document.getElementById('box2');
+      var boxleft2 = 0;
+      var startx2 = 0;
+
+      box2.addEventListener('touchstart', function(e){
+          var touchobj2 = e.changedTouches[0]; // reference first touch point
+          boxleft2 = parseInt(box2.style.left); // get left position of box
+          startx2 = parseInt(touchobj2.clientX); // get x coord of touch point
+          if(e.cancelable) e.preventDefault(); // prevent default click behavior
+      }, false);
+
+      box2.addEventListener('touchmove', function(e){
+          var touchobj2 = e.changedTouches[0]; // reference first touch point for this event
+          var dist = parseInt(touchobj2.clientX) - startx2; // calculate dist traveled by touch point
+          var left = ( (boxleft2 + dist > 550)? 550 : (boxleft2 + dist < 0)? 0 : boxleft2 + dist );
+          // move box according to starting pos plus dist
+          // with lower limit 0 and upper limit 380 so it doesn't move outside track:
+          box2.style.left = left + 'px';
+          if(e.cancelable) e.preventDefault();
+      }, false);
+    }
+
+    /**
+      get startet when loaded
+    **/
+    window.addEventListener('load', init, false);
+
+  </script>
+
+</head>
+<body>
+
+
+<div class="box" id="box1">
+<h3> Touch Me! </h3>
+</div>
+
+<h3 id="statusdiv">Status: no touch event yet</h3>
+
+<div id="track" class="track">
+<div id="box2" style="left:0;top:0;">Drag Me</div>
+
+
+<div class="credit">
+  <a href="http://www.javascriptkit.com/javatutors/touchevents.shtml">
+    credit: JavaScript Kit
+    http://www.javascriptkit.com/javatutors/touchevents.shtml</a>
+</div>
+
+</body>
+</html>

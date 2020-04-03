@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>autoplay</title>
+
+  <style>
+    @font-face {
+      font-family: 'OpenSansLight';
+      src: url('../font/OpenSans-Light.ttf') format('truetype');
+    }
+    body {
+      margin: 10px 20px;
+      font-family: OpenSansLight, sans-serif;
+      font-size: 15px;
+      background-color: #000;
+      color: #fff;
+    }
+    pre {
+     white-space: pre-wrap;
+     line-height: 20px;
+   }
+  </style>
+
+  <script>
+
+    var language = navigator.language;
+    var languages = navigator.languages;
+
+    function init() {
+      showLanguage();
+      window.onlanguagechange = function(ev) { languageChange(); };
+    }
+
+    function showLanguage() {
+      var output = document.getElementById('output');
+      output.innerHTML = 'navigator.language:  ' + navigator.language + '\n' +
+                         'navigator.languages: ' + navigator.languages;
+    }
+
+    function languageChange() {
+      var output = document.getElementById('event');
+      var now = new Date().toISOString().slice(11, 23);
+      var text = output.innerHTML;
+      text += 'languageChange at ' + now;
+      text += ' from ' + language + ' / ' + languages;
+      language = navigator.language;
+      languages = navigator.languages;
+      text += ' to ' + language + ' / ' + languages + '\n';
+      output.innerHTML = text;
+    }
+
+    /**
+      get startet when loaded
+    **/
+    window.addEventListener('load', init, false);
+
+	</script>
+
+</head>
+<body>
+
+  <h3>Language</h3>
+
+  <pre id="output"></pre>
+
+  <pre id="event"></pre>
+
+</body>
+</html>

@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+
+<html>
+<head><meta charset=utf-8>
+<title>Touchpoints and -events</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<style>
+@font-face {
+	font-family: 'OpenSansLight';
+	src: url('font/OpenSans-Light.ttf') format('truetype');
+}
+html,body {
+	font-family: 'VW Text CarUI', OpenSansLight, sans-serif;
+	background: #525252;
+	color: white
+	}
+h1 {
+	font-size: 1.5em
+	}
+
+.pad {
+	position: absolute;
+	margin: auto;
+	top: 0%;
+	right: 0%;
+	bottom: 10%;
+	left: 0;
+	width: 90%;
+	height: 60%;
+
+	border: 5px solid #7ce23f;
+	border-radius: 3px;
+	opacity: 0.3
+	}
+
+.ref_Area {
+	position: absolute;
+	margin: auto;
+	top: 10%;
+	right: 0%;
+	bottom: 0%;
+	left: 0;
+	width: 100%;
+	height: 75%;
+	border: 5px solid #d3d3d3;
+	}
+
+.touchArea_info{
+	position: absolute;
+	margin: auto;
+	top: 60%;
+	right: 0;
+	bottom: 5%;
+	left: 0%;
+	width: 60%;
+	height: 25%;
+	overflow: scroll;
+	z-index: 1
+	}
+
+canvas {
+	display:block;
+	position:absolute;
+	top: 0;
+	left: 0;
+	z-index: -1;
+}
+container {
+	background-color:#525252;
+	position: relative;
+	opacity: 0.75;
+}
+
+</style>
+
+</head>
+<body>
+<div class="container">
+<canvas id="paint"></canvas>
+<!--button onclick="displayInfo()">Info</button-->
+<button onclick="clearOutput()">Reset</button>
+<button onclick="toggleOutput()">Toggle output</button>
+<div id="reference_Area" class="ref_Area">
+<p><center><b><font color="white">reference Area</font></b></center></p>
+<div id="touchevents" class="pad">
+	<p><center><b>Touch here</b></center></p>
+</div>
+<div id="t_Info"class="touchArea_info"><output id="o">TouchArea Info</output></div>
+</div>
+</div>
+</body>
+
+<script>
+
+//Store needed HTML-Elements in variables
+var t_pad = document.getElementById('touchevents');
+var div_t_Info= document.getElementById('t_Info');
+var div_reference_Area= document.getElementById('reference_Area');
+var canvas=document.getElementById('paint');
+var c = canvas.getContext( '2d' );
+
+//Information about the events that appeared on the touchArea
+var t_eventType = '';
+var t_eventLen = 0;
+//Information about the events that appeared on the reference_Area
+var ref_eventType = '';
+var ref_eventLen = 0;
+//Copy of the touch-Information
+var pointsTouches = [], pointsTargetTouches = [], pointsChangedTouches = [];
+
+/*
+* If you toggle this to false, new Information regarding events appearing in the touchArea or the referenceArea won't be logged in the window. This is usefull when * you want to scroll in the output-area. Otherwise every scroll would lead to a new logged event.
+*/
+var updateLog=true;
+
+//count the number of events globally to make consecutive numbering for output purposes possible
+var counter=0;
+
+
+
+/*
+* Initialize Page
+*/
+function log() {
+	var args = Array.prototype.slice.call(arguments);
+	for (var i=0; i<args.length; i++) {
+		if (typeof args[i] === 'string' || args[i] instanceof String) {
+          // already a string: don't touch it
+    } else {
+			try {
+				args[i] = JSON.stringify(args[i]);
+			} catch(err) {
+				args[i] = args[i].toString();
+			}
+		}
+	}
+	var today = new Date().toISOString().slice(11, 23);
+	var now =  '[' + today + ']';
+	var msg = {
+		source: 'enginetest',
+		severity: 5,
+		timestamp: now,
+		message: args.join(' ')
+	};
+	console.log(JSON.stringify(msg));
+}
+
+
+function init() {
+	log('init()');
+	//setInterval(loop, 1000/35);
+	clearOutput();
+}
+
+
+/*
+* Handles events belonging to the green touch area.
+* For every new event  belonging to the touch area, the touchpoints to be drawn on the canvas are updated.
+* Generates an output on the screen if the eventtype changed or the number of touches changed
+*/
+function report_ta(e) {
+
+	log(e);
+	
+    if(e.cancelable) e.preventDefault();
+
+	//store the coordinates of the touchevent
+	positionHandler(e);
+	//loop();
+
+	//local variable for text to display
+	var tmp='';
+
+	//generate Output if the EventType or the number of touches changed
+	if (e.type!==t_eventType){
+	//EventType changed
+		tmp = counter+'. Type: '+e.type+', Count: '+e.touches.length+ ' [TouchArea]';
+
+
+
+		//update variables for tracking changes in event length and type
+		t_eventType=e.type;
+		t_eventLen=e.touches.length;
+		counter++;
+
+		//TODO: generate meaningfull LogData
+		if(updateLog){
+			doUpdate(tmp);
+			log(tmp);
+		}
+	}else{
+		if(t_eventLen!=e.touches.length){
+		//EventType stays the same, but number of touches changes
+			tmp = counter+'. Type: '+e.type+', Count: '+e.touches.length+ ' [TouchArea]';
+
+			//update variables for tracking changes in event length
+			t_eventLen=e.touches.length;
+			counter++;
+
+			//TODO: generate meaningfull LogData
+			if(updateLog){
+				doUpdate(tmp);
+				log(tmp);
+			}
+		}
+	}
+	e.stopPropagation();
+	//if(e.cancelable) e.preventDefault();
+}
+
+
+
+/*
+* Handles events belonging to the reference area.
+* Does not update the touchpoints to be drawn on the canvas.
+* Generates an output on the screen if the eventtype changed or the number of touches changed
+*/
+
+function report_ra(e){
+
+
+	log(e);
+	
+	if(e.cancelable) e.preventDefault();
+
+	//local variable for text to display
+	var tmp='';
+
+	//generate Output if the EventType or the number of touches changed
+	if (e.type !== ref_eventType){
+	//EventType changed
+
+		tmp = counter+'. Type: '+e.type+', Count: '+e.touches.length+' [Ref]';
+
+		//update variables for tracking changes in event length and type
+		ref_eventType=e.type;
+		ref_eventLen=e.touches.length;
+		counter++;
+
+		//TODO: generate meaningfull LogData
+		if(updateLog){
+			doUpdate(tmp);
+			log(tmp);
+		}
+	}
+	else{
+		if(ref_eventLen!=e.touches.length){
+		//EventType stays the same, but number of touches changes
+			tmp = counter+'. Type: '+e.type+', Count: '+e.touches.length+' [Ref]';
+
+			//update variables for tracking changes in event length
+			ref_eventLen=e.touches.length;
+			counter++;
+
+			//TODO: generate meaningfull LogData
+			if(updateLog){
+				doUpdate(tmp);
+				log(tmp);
+			}
+		}
+	}
+}
+
+
+/*
+* Updates the Output on screen and in the console.
+* s ist the string to be put on the display area and in the console
+*/
+
+ function doUpdate(s){
+	log('doUpdate()');
+	log("Adding new touch: "+s);
+	div_t_Info.innerHTML=div_t_Info.innerHTML+'<br>'+s;
+	//scroll to bottom
+	div_t_Info.scrollTop = div_t_Info.scrollHeight;
+}
+
+
+/*
+* Display information in an alertWindow.
+*/
+function displayInfo() {
+
+	log('displayInfo()');
+	var info ='1. Insert Information here\n';
+	info+='2. Insert Information here\n';
+	info+='3. Insert Information here\n';
+
+	alert(info);
+}
+
+
+/*
+* Reset the Information displaying in the Output-Areas
+*/
+function clearOutput() {
+	log('clearOutput()');
+
+	//reset variables
+	eventType = '';
+	eventLen = 0;
+	counter=0;
+	updateLog=true;
+	pointsTouches = [];
+	pointsTargetTouches = [];
+	pointsChangedTouches = [];
+	document.getElementById('t_Info').innerHTML='<b><center>Information for touches appear here</center></b>';
+	resetCanvas();
+}
+
+
+/*
+* Resets the size of the canvas for the current Size of the displayed area (e.g. after resizing the browser-window)
+*/
+function resetCanvas() {
+	//log('resetCanvas()');
+	devicePixelRatio = window.devicePixelRatio || 1;
+	canvas.width = window.innerWidth * devicePixelRatio;
+	canvas.height = window.innerHeight * devicePixelRatio;
+	canvas.style.width = window.innerWidth + 'px';
+	canvas.style.height = window.innerHeight + 'px';
+	c.scale(devicePixelRatio, devicePixelRatio);
+}
+
+/*
+* turn the output on screen on or off. Default is "on" when loading or resetting the page
+*/
+function toggleOutput() {
+	log('toggleOutput()');
+	updateLog=(!updateLog);
+	log('Output toggled. New value: '+updateLog);
+}
+
+/*
+* Update the locally stored copy of the touchpoints for the touchevent
+*/
+
+function positionHandler(e) {
+	//log('positionHandler(e)');
+
+	if ((e.clientX)&&(e.clientY)) {
+		points[0] = e;
+	} else if (e.targetTouches) {
+		pointsTouches = e.touches;
+		pointsTargetTouches = e.targetTouches;
+		pointsChangedTouches = e.changedTouches;
+		//e.preventDefault();
+	}
+}
+
+/*
+* Loop that is responsible for drawing the coloured circles around the touchpoints.
+* Adapted from https://patrickhlauke.github.io/touch/touchlist-objects/
+*/
+function loop() {
+
+
+	if(canvas.height != window.innerHeight * devicePixelRatio) {
+
+		resetCanvas();
+	} else {
+		c.clearRect(0,0,canvas.width, canvas.height);
+	}
+
+	/*
+	*White outline for all current touchpoints on the surface
+	*/
+	c.strokeStyle = "#eee";
+	c.lineWidth = "10";
+
+	for (var q = 0; q<pointsTouches.length; q++) {
+		c.beginPath();
+		c.arc(pointsTouches[q].clientX, pointsTouches[q].clientY, 60, 0, Math.PI*2, true);
+		c.closePath();
+		c.stroke();
+	}
+
+
+	/*
+	* Green outline for all touches belonging to the target of the eventhandler.
+	*/
+	c.strokeStyle = "#1f1";
+	for (var q = 0; q<pointsTargetTouches.length; q++) {
+		/* draw all circles */
+		c.beginPath();
+		c.arc(pointsTargetTouches[q].clientX, pointsTargetTouches[q].clientY, 50, 0, Math.PI*2, true);
+		c.closePath();
+		c.stroke();
+	}
+
+	/*
+	* Red Colour for all changed touches
+	*/
+
+	c.strokeStyle = "#f11";
+	for (var q = 0; q<pointsChangedTouches.length; q++) {
+		/* draw all circles */
+		c.beginPath();
+		c.arc(pointsChangedTouches[q].clientX, pointsChangedTouches[q].clientY, 40, 0, Math.PI*2, true);
+		c.closePath();
+		c.stroke();
+	}
+
+}
+
+/*
+* register EventHandlers with the components
+*/
+t_pad.addEventListener('touchstart',report_ta, false);
+t_pad.addEventListener('touchmove',report_ta, false);
+t_pad.addEventListener('touchend',report_ta, false);
+t_pad.addEventListener('touchcancel',report_ta, false);
+
+div_reference_Area.addEventListener('touchstart', report_ra, false);
+div_reference_Area.addEventListener('touchmove', report_ra, false);
+div_reference_Area.addEventListener('touchend', report_ra, false);
+div_reference_Area.addEventListener('touchcancel',report_ta, false);
+//Actions while loading the screen
+window.addEventListener('load',function() {
+	setTimeout(init,600);
+},false);
+
+</script>
+</html>

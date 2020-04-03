@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>JSEngine console</title>
+
+  <style>
+    @font-face {
+      font-family: 'OpenSansLight';
+      src: url('../font/OpenSans-Light.ttf') format('truetype');
+    }
+    body {
+      margin: 0px;
+      font-family: OpenSansLight, sans-serif;
+      font-size: 20px;
+      background-color: #000;
+      color: #fff;
+    }
+    p {
+      margin-left: 20px;
+      margin-top: 20px;
+    }
+    p.links {
+      line-height: 3;
+    }
+    a {
+      text-decoration: none;
+      color: white;
+      margin: 10px;
+      white-space: nowrap;
+    }
+    .button {
+      padding: 5px 15px;
+      border: 2px solid #fff;
+      border-radius: 5px;
+    }
+    .border {
+      border: 2px solid #fff;
+      border-radius: 5px;
+    }
+    .white {
+      background-color: white;
+    }
+    .green {
+      color: #5f5;
+      border-color: #5f5;
+    }
+  </style>
+
+  <script src="../rsi/script/eventEmitter/EventEmitter.js"></script>
+  <script src="../rsi/script/viwiclient.js"></script>
+  <script src="../script/housekeeping.js"></script>
+
+  <script language="javascript" type="text/javascript">
+
+    const server = "http://127.0.0.1:48710/api/jsengine/";
+
+
+    function goHome() {
+      location.href = document.referrer;
+      //location.href = '../index.html';
+    }
+
+    var w = document.documentElement.clientWidth
+        || document.body.clientWidth;
+
+    var h = document.documentElement.clientHeight
+        || document.body.clientHeight;
+
+    function init() {
+      var runbox = document.getElementById('runbox');
+      runbox.style.width = (w - 210) + 'px';
+      runbox.style.height = (h - 20) + 'px';
+
+      connectLinks();
+
+      outConsole('NOTICE: currently each test can only be run once (reason unknown)\n');
+
+      // web app housekeeping
+      var url = new URL(document.referrer);
+      var engineInstanceUri = url.searchParams.get('engineinstanceURI');
+      if (!engineInstanceUri) {
+        engineInstanceUri = url.searchParams.get('engineInstanceURI');
+      }
+      // ICAS3: --rsiRegistryURI=http://[::1]:80
+      var registry = url.searchParams.get('rsiRegistryURI');
+      if (!registry) {
+        // default
+        registry = 'http://127.0.0.1:443';
+      }
+      // target simulator trumps all
+      var viwi_port = url.searchParams.get('VIWI_PORT');
+			if (viwi_port) {
+				registry = 'http://127.0.0.1:' + viwi_port;
+			}
+      if (engineInstanceUri) {
+        var housekeeping = new Housekeeping('et.platform.housekeeping', engineInstanceUri, registry);
+        housekeeping.subscribeEngineState();
+      }
+    };
+
+    function connectLinks() {
+      var ids = [
+        'remoteREST',
+        'websocket',
+        'http2',
+        'viwiclient'
+      ];
+      for (var i=0; i<ids.length; i++) {
+        var a = document.getElementById(ids[i]);
+        if (a) {
+          a.onclick = function(e) {
+            var id = e.target.id;
+            var today = new Date().toISOString().slice(11, 23);
+	          var now =  '[' + today + ']';
+            console.log('{"source":"enginetest","severity":5, "timestamp":' + now + ',msg": "orderTest ' + id + '"}');
+            orderTest(id);
+            return false;
+          }
+        }
+      }
+    }
+
+    function clearConsole() {
+      document.getElementById('runbox').contentWindow.clearConsole();
+    }
+
+    function outConsole(text) {
+      document.getElementById('runbox').contentWindow.out(text);
+    }
+
+    function internetREST() {
+      clearConsole();
+      outConsole('Order: test REST over internet\n');
+      orderTest('remoteREST');
+    }
+
+    function orderTest(id) {
+      fetch(server + id)
+      .then(function(response) {
+        return response.json();
+      })
+      .then(function(result) {
+        if (!(result && result.status && result.status == 'ok')) {
+          outConsole(JSON.stringify(result) + '\n');
+        }
+        return true;
+      })
+      .catch(function(err) {
+        outConsole('FAILED to order test: ' + id + '\n');
+      });
+    }
+
+    /**
+      get startet when loaded
+    **/
+    window.addEventListener('load', init, false);
+
+	</script>
+
+</head>
+<body>
+
+<iframe style="position:absolute;left:200px;top:10px;"
+   class="border"
+   src="console.html" name="runbox" id="runbox">
+   <p>iframes are not supported by your browser.</p>
+</iframe><br />
+
+<div style="position:fixed;top:10px;left:10px;width:180px;">
+
+  <br><br><a class="button green" href="#" onclick="goHome();return false;">home</a><br><br>
+
+  <!-- trigger actions toward node app -->
+
+  <br><br>
+  <a id="remoteREST" href="index.html">REST over internet</a>
+  <br><br>
+  <a id="websocket" href="index.html">wss: over internet</a>
+  <br><br>
+  <a id="http2" href="index.html">http2 over internet</a>
+  <br><br>
+  <a id="viwiclient" href="index.html">viwi/RSI client</a>
+  <br><br>
+  <a href="#" onclick="clearConsole();return false;">clear</a>
+
+</div>
+
+</body>
+</html>

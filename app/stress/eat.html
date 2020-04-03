@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Memory eater</title>
+
+  <style>
+    @font-face {
+      font-family: 'OpenSansLight';
+      src: url('../font/OpenSans-Light.ttf') format('truetype');
+    }
+    body {
+      margin: 10px 20px;
+      font-family: OpenSansLight, sans-serif;
+      font-size: 15px;
+      background-color: #000;
+      color: #fff;
+    }
+    pre {
+     white-space: pre-wrap;
+     line-height: 20px;
+   }
+  </style>
+
+  <script>
+
+    var stomach;
+    var eaten;
+    var reporter;
+
+    function startEater(size) {
+      if (size) {
+        send('start memory eater, try to swallow ' + size + 'MB<br>');
+        var loops = size;
+      } else {
+        send('start memory eater, try to swallow it all<br>');
+        var loops = 1000000;
+      }
+      if (reporter) {
+        clearInterval(reporter);
+        reporter = null;
+      }
+      eaten = 0;
+      eatMemory(loops);
+      reporter = setInterval(function() {
+        send(' ' + eaten);
+      }, 10000);
+    }
+
+    function eatMemory(loops) {
+      stomach = Array(loops);
+      var eater = setInterval(function() {
+        // 64 bit number?
+        var portion = 128*1024;
+        stomach[eaten] = Array(portion);
+        try {
+          for (var i=0; i<(portion); i++) {
+            stomach[eaten][i] = i;
+          }
+          eaten++;
+          if (eaten > loops - 1) {
+            send('<br>done, eaten: ' + eaten + 'MB\n');
+            clearInterval(eater);
+            clearInterval(reporter);
+          }
+        }
+        catch(err) {
+          send('<br>ERROR: ' + err.message + '<br>');
+          send('eaten so far: ' + eaten + 'MB\n');
+          clearInterval(eater);
+          clearInterval(reporter);
+        }
+      }, 100);
+    }
+
+    function send(text) {
+      var output = document.getElementById('output');
+      output.innerHTML += text;
+      log(text.replace('<br', ''));
+    }
+
+    function log() {
+      var args = Array.prototype.slice.call(arguments);
+      for (var i=0; i<args.length; i++) {
+        if (typeof args[i] === 'string' || args[i] instanceof String) {
+          // already a string: don't touch it
+        } else {
+          try {
+            args[i] = JSON.stringify(args[i]);
+          } catch(err) {
+            args[i] = args[i].toString();
+          }
+        }
+      }
+      var today = new Date().toISOString().slice(11, 23);
+	    var now =  '[' + today + ']';
+      var msg = {
+        source: 'enginetest.allyoucaneat',
+        severity: 5,
+        timestamp: now,
+        message: args.join(' ')
+      };
+      console.log(JSON.stringify(msg));
+    }
+
+
+    function init() {
+      var url = new URL(window.location.href);
+      var size = url.searchParams.get('size');
+      startEater(size);
+    }
+
+    /**
+      get startet when loaded
+    **/
+    window.addEventListener('load', init, false);
+
+	</script>
+
+</head>
+<body>
+
+  <h3>Memory eater</h3>
+
+  <pre id="output"></pre>
+
+</body>
+</html>

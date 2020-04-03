@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>wss test</title>
+
+  <script>
+
+  // Create WebSocket connection.
+  const socket = new WebSocket('wss://modappsws.goip.de/');
+
+  // Connection opened
+  socket.addEventListener('open', function (event) {
+      socket.send('Hello Server!');
+  });
+
+  // Listen for messages
+  socket.addEventListener('message', function (event) {
+      document.getElementById('output').innerHTML = event.data;
+  });
+
+  // ToDo: add on error output
+
+  </script>
+</head>
+<body>
+	<h1>response from server</h1>
+  <div id="output"></div>
+</body>
+</html>

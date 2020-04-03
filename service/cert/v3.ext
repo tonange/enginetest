@@ -1,0 +1,11 @@
+authorityKeyIdentifier=keyid,issuer
+basicConstraints=CA:FALSE
+keyUsage = digitalSignature, nonRepudiation, keyEncipherment, dataEncipherment
+subjectAltName = @alt_names
+
+[alt_names]
+DNS.1 = webapps
+DNS.2 = enginetest.webapps
+DNS.3 = wac.local
+DNS.4 = enginetest.wac.local
+DNS.5 = enginetest

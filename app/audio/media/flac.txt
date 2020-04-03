@@ -1,0 +1,22 @@
+General
+Complete name                            : /Users/ecki/Documents/workspace/mod/enginetest/main/audio/media/Es tanzt ein Bi-Ba-Butzemann.flac
+Format                                   : FLAC
+Format/Info                              : Free Lossless Audio Codec
+File size                                : 12.8 MiB
+Duration                                 : 1mn 14s
+Overall bit rate mode                    : Variable
+Overall bit rate                         : 1 437 Kbps
+
+Audio
+Format                                   : FLAC
+Format/Info                              : Free Lossless Audio Codec
+Duration                                 : 1mn 14s
+Bit rate mode                            : Variable
+Bit rate                                 : 1 437 Kbps
+Channel(s)                               : 2 channels
+Channel positions                        : Front: L R
+Sampling rate                            : 48.0 KHz
+Bit depth                                : 24 bits
+Stream size                              : 12.8 MiB (100%)
+Writing library                          : libFLAC 1.2.1 (UTC 2007-09-17)
+

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Systemfont</title>
+
+  <style>
+    @font-face {
+      font-family: 'OpenSansLight';
+      src: url('font/OpenSans-Light.ttf') format('truetype');
+    }
+    body {
+      font-family: OpenSansLight, sans-serif;
+      background-color: #000;
+      color: #fff;
+    }
+    p.regular {
+      font-family: 'VW Text CarUI';
+    }
+    p.light {
+      font-family: 'VW Text CarUI Light';
+    }
+    p.bold {
+      font-family: 'VW Text CarUI';
+      font-weight: bold;
+    }
+    p.head {
+      font-family: 'VW Head CarUI';
+    }
+    p {
+      font-size: 24px;
+      margin-top: 0px;
+      margin-left: 20px;
+      margin-bottom: 10px;
+    }
+    a {
+      text-decoration: none;
+      color: white;
+    }
+    .border {
+      border: 2px solid #fff;
+      border-radius: 5px;
+      padding: 5px 15px;
+      white-space: nowrap;
+    }
+    .green {
+      color: #5f5;
+      border-color: #5f5;
+    }
+    .refimg {
+      margin-left: 20px;
+      border: 1px solid grey;
+    }
+  </style>
+
+
+</head>
+
+<body>
+
+  <p class="regular">VW Text CarUI Regular 12345 (+-/=)</p>
+
+  <p class="light">VW Text CarUI Light 12345 (+-/=)</p>
+
+  <p class="bold">VW Text CarUI Bold 12345 (+-/=)</p>
+
+  <p class="head">VW Head CarUI Regular 12345 (+-/=)</p>
+
+  <p>Reference Bitmap (chrome on Mac)</p>
+  <img class="refimg" src="img/fontref.png">
+
+</body>
+</html>

@@ -1,0 +1,31 @@
+General
+Complete name                            : /Users/ecki/Documents/workspace/mod/enginetest/main/audio/media/Es tanzt ein Bi-Ba-Butzemann.m4a
+Format                                   : MPEG-4
+Format profile                           : Apple audio with iTunes info
+Codec ID                                 : M4A  (isom/iso2)
+File size                                : 1.17 MiB
+Duration                                 : 1mn 14s
+Overall bit rate mode                    : Variable
+Overall bit rate                         : 131 Kbps
+Encoded date                             : UTC 1970-01-01 00:00:00
+Tagged date                              : UTC 1970-01-01 00:00:00
+Writing application                      : Lavf52.64.2
+
+Audio
+ID                                       : 1
+Format                                   : AAC
+Format/Info                              : Advanced Audio Codec
+Format profile                           : LC
+Codec ID                                 : mp4a-40-2
+Duration                                 : 1mn 14s
+Bit rate mode                            : Variable
+Bit rate                                 : 128 Kbps
+Channel(s)                               : 2 channels
+Channel positions                        : Front: L R
+Sampling rate                            : 48.0 KHz
+Frame rate                               : 46.875 fps (1024 SPF)
+Compression mode                         : Lossy
+Stream size                              : 1.14 MiB (98%)
+Encoded date                             : UTC 1970-01-01 00:00:00
+Tagged date                              : UTC 1970-01-01 00:00:00
+

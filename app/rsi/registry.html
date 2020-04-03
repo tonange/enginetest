@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>RSI registry</title>
+
+  <style>
+  @font-face {
+    font-family: 'OpenSansLight';
+    src: url('../font/OpenSans-Light.ttf') format('truetype');
+  }
+  body {
+    margin: 10px 15px;
+    font-family: OpenSansLight, sans-serif;
+    font-size: 14px;
+    background-color: #000;
+    color: #fff;
+  }
+  #status {
+
+  }
+  #data {
+
+  }
+  </style>
+
+  <script>
+
+    var registryUri;
+    var registry = [];
+
+    var hdr = new Headers();
+    hdr.append('pragma', 'no-cache');
+    hdr.append('cache-control', 'no-store');
+    var fetchopts = {
+//      headers: hdr
+    };
+
+    // check if we run on the target or in a dev env
+    function realDeal() {
+      real = true;
+      if (navigator.platform.substring(0, 3) == 'Mac') real = false;
+      if (navigator.platform.substring(0, 3) == 'Win') real = false;
+      log('real deal?', real);
+      return real;
+    }
+
+    function output(id, msg, append) {
+      var elem = document.getElementById(id);
+      if (elem) {
+        var text = msg;
+        if (append) {
+          text = elem.innerHTML + text;
+        }
+        elem.innerHTML = text;
+      }
+    }
+
+    function getRegistry() {
+      var url = new URL(document.referrer);
+      var engineInstanceUri = url.searchParams.get('engineinstanceURI');
+      if (!engineInstanceUri) {
+        engineInstanceUri = url.searchParams.get('engineInstanceURI');
+      }
+      // ICAS3: --rsiRegistryURI=http://[::1]:80
+      var registryUri = url.searchParams.get('rsiRegistryURI');
+      if (!registryUri) {
+        // default
+        registryUri = 'http://127.0.0.1:443';
+      }
+      // target simulator trumps all
+      var viwi_port = url.searchParams.get('VIWI_PORT');
+      if (viwi_port) {
+        registryUri = 'http://127.0.0.1:' + viwi_port;
+      }
+      output('status', 'look for registry at ' + registryUri, false);
+      fetch(registryUri + '/', fetchopts)
+      .then(function(response) {
+        return response.json();
+      })
+      .then(function(register) {
+        output('status', ' ... SUCCESS', true);
+        handleRegistry(register);
+        return true;
+      })
+      .catch(function(err) {
+        output('status', ' ... FAILED to fetch registry:<br>' + err, true);
+      });
+    }
+
+    function handleRegistry(register) {
+      if (register && register.status && register.status == 'ok' && register.data) {
+        registry = register.data;
+        showRegistry(registry);
+      } else {
+        output('status', '<br>FAILED to read registry:<br>' +
+                JSON.stringify(register, null, '  '), true);
+      }
+    }
+
+    function showRegistry(registry) {
+      output('data', 'registered services:<br>', false);
+      for (var i=0; i<registry.length; i++) {
+        var service = registry[i];
+        output('data', service.name + ' @ port=' + service.port + ' uri=' + service.uri + '<br>', true);
+      }
+    }
+
+    function log() {
+      var args = Array.prototype.slice.call(arguments);
+      for (var i=0; i<args.length; i++) {
+        if (typeof args[i] === 'string' || args[i] instanceof String) {
+          // already a string: don't touch it
+        } else {
+          try {
+            args[i] = JSON.stringify(args[i]);
+          } catch(err) {
+            args[i] = args[i].toString();
+          }
+        }
+      }
+      var today = new Date().toISOString().slice(11, 23);
+	    var now =  '[' + today + ']';
+      var msg = {
+        source: 'enginetest',
+        severity: 5,
+        timestamp: now,
+        message: args.join(' ')
+      };
+      console.log(JSON.stringify(msg));
+    }
+
+    function init() {
+      getRegistry();
+    }
+    /**
+      get startet when loaded
+    **/
+   window.addEventListener('load', init, false);
+
+	</script>
+
+</head>
+<body>
+
+<div id="status"></div>
+<hr>
+<div id="data"></div>
+
+</body>
+</html>

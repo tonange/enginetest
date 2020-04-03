@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Main Test Page</title>
+
+  <style>
+    @font-face {
+      font-family: 'OpenSansLight';
+      src: url('../font/OpenSans-Light.ttf') format('truetype');
+    }
+    body {
+      padding: 10px;
+      font-family: OpenSansLight, sans-serif;
+      font-size: 24px;
+      background-color: #000;
+      color: #fff;
+    }
+    a {
+      text-decoration: none;
+      color: white;
+    }
+    .home {
+      border: 2px solid #fff;
+      border-radius: 5px;
+      padding: 5px 15px;
+      white-space: nowrap;
+    }
+    .green {
+      color: #5f5;
+      border-color: #5f5;
+    }
+    p {
+      white-space: pre-wrap;
+      line-height: 1.5;
+    }
+    img {
+      width: 250px;
+      height: auto;
+      margin-right: 20px;
+      margin-bottom: 10px;
+    }
+    .left {
+      float: left;
+      overflow: auto;
+    }
+    .right {
+      float: right;
+      overflow: auto;
+    }
+    .clear {
+      clear: both;
+    }
+    h1 {
+      margin-top: 50px;
+      margin-bottom: 40px;
+      clear: both;
+      border-top: 2px solid white;
+      border-bottom: 2px solid white;
+    }
+    h2 {
+      margin-top: 50px;
+      margin-bottom: 30px;
+      clear: both;
+      border-bottom: 2px solid white;
+    }
+  </style>
+
+  <script src="../rsi/script/eventEmitter/EventEmitter.js"></script>
+  <script src="../rsi/script/viwiclient.js"></script>
+  <script src="../script/housekeeping.js"></script>
+
+  <script language="javascript" type="text/javascript">
+    function goHome() {
+      location.href = document.referrer;
+    }
+    function init() {
+      // web app housekeeping
+      var url = new URL(document.referrer);
+      var engineInstanceUri = url.searchParams.get('engineinstanceURI');
+      if (!engineInstanceUri) {
+        engineInstanceUri = url.searchParams.get('engineInstanceURI');
+      }
+      // ICAS3: --rsiRegistryURI=http://[::1]:80
+      var registry = url.searchParams.get('rsiRegistryURI');
+      if (!registry) {
+        // default
+        registry = 'http://127.0.0.1:443';
+      }
+      // target simulator trumps all
+      var viwi_port = url.searchParams.get('VIWI_PORT');
+			if (viwi_port) {
+				registry = 'http://127.0.0.1:' + viwi_port;
+      }
+      console.log(url);
+      console.log(registry);
+      if (engineInstanceUri) {
+        var housekeeping = new Housekeeping('enginetest', engineInstanceUri, registry);
+        housekeeping.subscribeEngineState();
+      }
+    };
+    /**
+      get startet when loaded
+    **/
+    window.addEventListener('load', init, false);
+
+  </script>
+
+</head>
+
+<body>
+
+<br><br>
+<p><a class="home green" href="#" onclick="goHome();return false;">home</a></p>
+
+<h1>Eine Bubengeschichte in sieben Streichen</h1>
+
+<p><img class="right" style="width: 300px;" src="mum/Wilhelm_busch.png">Max und Moritz machten beide,
+Als sie lebten, keine Freude:
+Bildlich siehst du jetzt die Possen,
+Die in Wirklichkeit verdrossen,
+Mit behaglichem Gekicher,
+Weil du selbst vor ihnen sicher.
+Aber das bedenke stets:
+Wie man's treibt, mein Kind, so geht's.</p>
+
+<p class="clear"> <img class="left" style="width: 350px;" src="mum/Max_und_Moritz_(Busch)_001.png">Ach, was muß man oft von bösen
+Kindern hören oder lesen!
+Wie zum Beispiel hier von diesen,
+Welche Max und Moritz hießen;
+Die, anstatt durch weise Lehren
+Sich zum Guten zu bekehren,
+Oftmals noch darüber lachten
+Und sich heimlich lustig machten.
+Ja, zur Übeltätigkeit,
+Ja, dazu ist man bereit!
+Menschen necken, Tiere quälen,
+Äpfel, Birnen, Zwetschgen stehlen,
+Das ist freilich angenehmer
+Und dazu auch viel bequemer,
+Als in Kirche oder Schule
+Festzusitzen auf dem Stuhle.
+Aber wehe, wehe, wehe!
+Wenn ich auf das Ende sehe!!
+Ach, das war ein schlimmes Ding,
+Wie es Max und Moritz ging!
+Drum ist hier, was sie getrieben,
+Abgemalt und aufgeschrieben.</p>
+
+<h2>Erster Streich</h2>
+
+<p>Mancher gibt sich viele Müh'
+Mit dem lieben Federvieh;
+Einesteils der Eier wegen,
+Welche diese Vögel legen;
+Zweitens: Weil man dann und wann
+Einen Braten essen kann;
+Drittens aber nimmt man auch
+Ihre Federn zum Gebrauch
+In die Kissen und die Pfühle,
+Denn man liegt nicht gerne kühle.</p>
+
+<p class="clear"> <img class ="left" src="mum/Max_und_Moritz_(Busch)_002.png">Seht, da ist die Witwe Bolte,
+Die das auch nicht gerne wollte.</p>
+
+<p class="clear"> <img class ="left" src="mum/Max_und_Moritz_(Busch)_003.png">Ihrer Hühner waren drei
+Und ein stolzer Hahn dabei.
+Max und Moritz dachten nun:
+Was ist hier jetzt wohl zu tun?
+Ganz geschwinde, eins, zwei, drei,
+Schneiden sie sich Brot entzwei,</p>
+
+<p class="clear"> <img class ="left" src="mum/Max_und_Moritz_(Busch)_004.png">In vier Teile, jedes Stück
+Wie ein kleiner Finger dick.
+Diese binden sie an Fäden,
+Übers Kreuz, ein Stück an jeden,
+Und verlegen sie genau
+In den Hof der guten Frau. -</p>
+
+<p class="clear"> <img class ="left" src="mum/Max_und_Moritz_(Busch)_005.png">Kaum hat dies der Hahn gesehen,
+Fängt er auch schon an zu krähen:
+Kikeriki! Kikikerikih!! -
+Tak, tak, tak! - Da kommen sie.</p>
+
+<p class="clear"> <img class ="left" src="mum/Max_und_Moritz_(Busch)_006.png">Hahn und Hühner schlucken munter
+Jedes ein Stück Brot hinunter;</p>
+
+<p class="clear"> <img class ="left" src="mum/Max_und_Moritz_(Busch)_007.png">Aber als sie sich besinnen,
+Konnte keines recht von hinnen.</p>
+
+<p class="clear"> <img class ="left" src="mum/Max_und_Moritz_(Busch)_008.png">In die Kreuz und in die Quer
+Reißen sie sich hin und her,</p>
+
+<p class="clear"> <img class ="left" src="mum/Max_und_Moritz_(Busch)_009.png">Flattern auf und in die Höh',
+Ach herrje, herrjemine!</p>
+
+<p class="clear"> <img class ="left" src="mum/Max_und_Moritz_(Busch)_010.png">Ach, sie bleiben an dem langen,
+Dürren Ast des Baumes hangen,
+Und ihr Hals wird lang und länger,
+Ihr Gesang wird bang und bänger.</p>
+
+<p class="clear"> <img class ="left" src="mum/Max_und_Moritz_(Busch)_011.png">Jedes legt noch schnell ein Ei,
+Und dann kommt der Tod herbei.</p>
+
+<p class="clear"> <img class ="left" src="mum/Max_und_Moritz_(Busch)_012.png">Witwe Bolte in der Kammer
+Hört im Bette diesen Jammer;</p>
+
+<p class="clear"> <img class ="left" src="mum/Max_und_Moritz_(Busch)_013.png">Ahnungsvoll tritt sie heraus,
+Ach, was war das für ein Graus!</p>
+
+<p class="clear"> <img class ="left" src="mum/Max_und_Moritz_(Busch)_014.png">»Fließet aus dem Aug', ihr Tränen!
+All mein Hoffen, all mein Sehnen,
+Meines Lebens schönster Traum
+Hängt an diesem Apfelbaum!«</p>
+
+<p class="clear"> <img class ="left" src="mum/Max_und_Moritz_(Busch)_015.png">Tiefbetrübt und sorgenschwer
+Kriegt sie jetzt das Messer her,
+Nimmt die Toten von den Strängen,
+Daß sie so nicht länger hängen,</p>
+
+<p class="clear"> <img class ="left" src="mum/Max_und_Moritz_(Busch)_016.png">Und mit stummem Trauerblick
+Kehrt sie in ihr Haus zurück.</p>
+
+<p>Dieses war der erste Streich,
+Doch der zweite folgt sogleich.</p>
+
+<h2>Zweiter Streich</h2>
+
+<p>Als die gute Witwe Bolte
+Sich von ihrem Schmerz erholte,
+Dachte sie so hin und her,
+Daß es wohl das beste wär',
+Die Verstorbnen, die hienieden
+Schon so frühe abgeschieden,
+Ganz im stillen und in Ehren
+Gut gebraten zu verzehren.
+Freilich war die Trauer groß,
+Als sie nun so nackt und bloß
+Abgerupft am Herde lagen,
+Sie, die einst in schönen Tagen
+Bald im Hofe, bald im Garten
+Lebensfroh im Sande scharrten. -</p>
+
+<p class="clear"> <img class ="left" src="mum/Max_und_Moritz_(Busch)_017.png">Ach, Frau Bolte weint aufs neu,
+Und der Spitz steht auch dabei. -</p>
+
+<p class="clear"> <img class ="left" src="mum/Max_und_Moritz_(Busch)_018.png">Max und Moritz rochen dieses.
+»Schnell aufs Dach gekrochen!« hieß es.</p>
+
+<p class="clear"> <img class ="left" src="mum/Max_und_Moritz_(Busch)_019.png">Max und Moritz rochen dieses.
+»Schnell aufs Dach gekrochen!« hieß es.</p>
+
+<p class="clear"> <img class ="left" src="mum/Max_und_Moritz_(Busch)_020.png">Eben geht mit einem Teller
+Witwe Bolte in den Keller,
+Daß sie von dem Sauerkohle
+Eine Portion sich hole,
+Wofür sie besonders schwärmt,
+Wenn er wieder aufgewärmt.</p>
+
+<p class="clear"> <img class ="left" src="mum/Max_und_Moritz_(Busch)_021.png">Unterdessen auf dem Dache
+Ist man tätig bei der Sache.
+Max hat schon mit Vorbedacht
+Eine Angel mitgebracht.
+
+Schnupdiwup! Da wird nach oben
+Schon ein Huhn heraufgehoben.
+Schnupdiwup! Jetzt Numro zwei;
+Schnupdiwup! Jetzt Numro drei;
+Und jetzt kommt noch Numro vier:
+Schnupdiwup! Dich haben wir!! -
+Zwar der Spitz sah es genau
+Und er bellt: Rawau! Rawau!</p>
+
+<p class="clear"> <img class ="left" src="mum/Max_und_Moritz_(Busch)_022.png">Aber schon sind sie ganz munter
+Fort und von dem Dach herunter. -</p>
+
+<p class="clear"> <img class ="left" src="mum/Max_und_Moritz_(Busch)_023.png">Na! Das wird Spektakel geben,
+Denn Frau Bolte kommt soeben;
+Angewurzelt stand sie da,
+Als sie nach der Pfanne sah.
+
+Alle Hühner waren fort. -
+»Spitz!!« - Das war ihr erstes Wort.</p>
+
+<p class="clear"> <img class ="left" src="mum/Max_und_Moritz_(Busch)_024.png">»O du Spitz, du Ungetüm!
+Aber wart! Ich komme ihm!«</p>
+
+<p class="clear"> <img class ="left" src="mum/Max_und_Moritz_(Busch)_025.png">Mit dem Löffel groß und schwer
+Geht es über Spitzen her;
+Laut ertönt sein Wehgeschrei,
+Denn er fühlt sich schuldenfrei</p>
+
+<p class="clear"> <img class ="left" src="mum/Max_und_Moritz_(Busch)_026.png">Max und Moritz im Verstecke
+Schnarchen aber an der Hecke,
+Und vom ganzen Hühnerschmaus
+Guckt nur noch ein Bein heraus.</p>
+
+<p>Dieses war der zweite Streich,
+Doch der dritte folgt sogleich</p>
+
+<h2>Dritter Streich</h2>
+
+<p>Jedermann im Dorfe kannte
+Einen, der sich Böck benannte. -</p>
+
+<p class="clear"> <img class ="left" src="mum/Max_und_Moritz_(Busch)_027.png">Alltagsröcke, Sonntagsröcke,
+Lange Hosen, spitze Fräcke,
+Westen mit bequemen Taschen,
+Warme Mäntel und Gamaschen,-
+Alle diese Kleidungssachen
+Wußte Schneider Böck zu machen. -
+Oder wäre was zu flicken,
+Abzuschneiden, anzustücken,
+Oder gar ein Knopf der Hose
+Abgerissen oder lose -
+Wie und wo und wann es sei,
+Hinten, vorne, einerlei -
+Alles macht der Meister Böck,
+Denn das ist sein Lebenszweck. -
+Drum so hat in der Gemeinde
+Jedermann ihn gern zum Freunde. -
+Aber Max und Moritz dachten,
+Wie sie ihn verdrießlich machten. -</p>
+
+<p class="clear"> <img class ="left" src="mum/Max_und_Moritz_(Busch)_028.png">Nämlich vor des Meisters Hause
+Floß ein Wasser mit Gebrause.
+
+Übers Wasser führt ein Steg,
+Und darüber geht der Weg. -</p>
+
+<p class="clear"> <img class ="left" src="mum/Max_und_Moritz_(Busch)_029.png">Max und Moritz, gar nicht träge,
+Sägen heimlich mit der Säge,
+Ritzeratze! voller Tücke,
+In die Brücke eine Lücke. -</p>
+
+<p class="clear"> <img class ="left" src="mum/Max_und_Moritz_(Busch)_030.png">Als nun diese Tat vorbei,
+Hört man plötzlich ein Geschrei:
+
+»He, heraus! Du Ziegen-Böck!
+Schneider, Schneider, meck, meck, meck!« -
+Alles konnte Böck ertragen,
+Ohne nur ein Wort zu sagen;
+Aber wenn er dies erfuhr,
+Ging's ihm wider die Natur.</p>
+
+<p class="clear"> <img class ="left" src="mum/Max_und_Moritz_(Busch)_031.png">Schnelle springt er mit der Elle
+Über seines Hauses Schwelle,
+Denn schon wieder ihm zum Schreck
+Tönt ein lautes: »Meck, meck, meck!!«</p>
+
+<p class="clear"> <img class ="left" src="mum/Max_und_Moritz_(Busch)_032.png">Und schon ist er auf der Brücke,
+Kracks! Die Brücke bricht in Stücke;</p>
+
+<p class="clear"> <img class ="left" src="mum/Max_und_Moritz_(Busch)_033.png">Wieder tönt es: »Meck, meck, meck!«
+Plumps! Da ist der Schneider weg!</p>
+
+<p class="clear"> <img class ="left" src="mum/Max_und_Moritz_(Busch)_034.png">Grad als dieses vorgekommen,
+Kommt ein Gänsepaar geschwommen,</p>
+
+<p class="clear"> <img class ="left" src="mum/Max_und_Moritz_(Busch)_035.png">Welches Böck in Todeshast
+Krampfhaft bei den Beinen faßt.</p>
+
+<p class="clear"> <img class ="left" src="mum/Max_und_Moritz_(Busch)_036.png">Beide Gänse in der Hand
+Flattert er auf trocknes Land. -"</p>
+
+<p class="clear"> <img class ="left" src="mum/Max_und_Moritz_(Busch)_037.png">Übrigens bei alle dem
+Ist so etwas nicht bequem;</p>
+
+<p class="clear"> <img class ="left" src="mum/Max_und_Moritz_(Busch)_038.png">Wie denn Böck von der Geschichte
+Auch das Magendrücken kriegte.</p>
+
+<p class="clear"> <img class ="left" src="mum/Max_und_Moritz_(Busch)_039.png">Hoch ist hier Frau Böck zu preisen!
+Denn ein heißes Bügeleisen,
+Auf den kalten Leib gebracht,
+Hat es wiedergutgemacht. -
+
+Bald im Dorf hinauf, hinunter,
+Hieß es: Böck ist wieder munter!!</p>
+
+<p>Dieses war der dritte Streich,
+Doch der vierte folgt sogleich.</p>
+
+<h2>Vierter Streich</h2>
+
+<p>Also lautet ein Beschluß,
+Daß der Mensch was lernen muß. -
+Nicht allein das Abc
+Bringt den Menschen in die Höh';
+Nicht allein in Schreiben, Lesen
+Übt sich ein vernünftig Wesen;
+Nicht allein in Rechnungssachen
+Soll der Mensch sich Mühe machen,
+Sondern auch der Weisheit Lehren
+Muß man mit Vergnügen hören. -</p>
+
+<p class="clear"> <img class ="left" src="mum/Max_und_Moritz_(Busch)_040.png">Daß dies mit Verstand geschah,
+War Herr Lehrer Lämpel da. -
+
+Max und Moritz, diese beiden,
+Mochten ihn darum nicht leiden;
+Denn wer böse Streiche macht,
+Gibt nicht auf den Lehrer acht. -
+
+Nun war dieser brave Lehrer
+Von dem Tobak ein Verehrer,
+Was man ohne alle Frage
+Nach des Tages Müh und Plage
+Einem guten, alten Mann
+Auch von Herzen gönnen kann. -
+
+Max und Moritz, unverdrossen,
+Sinnen aber schon auf Possen,
+Ob vermittelst seiner Pfeifen
+Dieser Mann nicht anzugreifen. -</p>
+
+<p class="clear"> <img class ="left" src="mum/Max_und_Moritz_(Busch)_041.png">Einstens, als es Sonntag wieder
+Und Herr Lämpel, brav und bieder,
+In der Kirche mit Gefühle
+Saß vor seinem Orgelspiele,</p>
+
+<p class="clear"> <img class ="left" src="mum/Max_und_Moritz_(Busch)_042.png">Schlichen sich die bösen Buben
+In sein Haus und seine Stuben,
+Wo die Meerschaumpfeife stand;
+Max hält sie in seiner Hand;
+
+Aber Moritz aus der Tasche
+Zieht die Flintenpulverflasche,
+Und geschwinde, stopf, stopf, stopf!
+Pulver in den Pfeifenkopf. -
+Jetzt nur still und schnell nach Haus,
+Denn schon ist die Kirche aus. -</p>
+
+<p class="clear"> <img class="left" src="mum/Max_und_Moritz_(Busch)_043.png">Eben schließt in sanfter Ruh
+Lämpel seine Kirche zu;
+Und mit Buch und Notenheften
+Nach besorgten Amtsgeschäften,
+
+Lenkt er freudig seine Schritte
+Zu der heimatlichen Hütte,</p>
+
+<p class="clear"> <img class="left" src="mum/Max_und_Moritz_(Busch)_044.png">Und voll Dankbarkeit sodann
+Zündet er sein Pfeifchen an.</p>
+
+<p class="clear"> <img class="left" src="mum/Max_und_Moritz_(Busch)_045.png">»Ach!« - spricht er - »Die größte Freud'
+Ist doch die Zufriedenheit!!«</p>
+
+<p class="clear"> <img class ="left" src="mum/Max_und_Moritz_(Busch)_046.png">Rums!! - Da geht die Pfeife los
+Mit Getöse, schrecklich groß.
+Kaffeetopf und Wasserglas,
+Tobaksdose, Tintenfaß,
+Ofen, Tisch und Sorgensitz -
+Alles fliegt im Pulverblitz. -</p>
+
+<p class="clear"> <img class="left" src="mum/Max_und_Moritz_(Busch)_047.png">Als der Dampf sich nun erhob,
+Sieht man Lämpel, der gottlob
+Lebend auf dem Rücken liegt;
+Doch er hat was abgekriegt.</p>
+
+<p class="clear"> <img class="left" src="mum/Max_und_Moritz_(Busch)_048.png">Nase, Hand, Gesicht und Ohren
+Sind so schwarz als wie die Mohren,
+Und des Haares letzter Schopf
+Ist verbrannt bis auf den Kopf. -
+
+Wer soll nun die Kinder lehren
+Und die Wissenschaft vermehren?
+Wer soll nun für Lämpel leiten
+Seine Amtestätigkeiten?
+Woraus soll der Lehrer rauchen,
+Wenn die Pfeife nicht zu brauchen??</p>
+
+<p class="clear"> <img  class="left" src="mum/Max_und_Moritz_(Busch)_049.png">Mit der Zeit wird alles heil,
+Nur die Pfeife hat ihr Teil.</p>
+
+<p>Dieses war der vierte Streich,
+Doch der fünfte folgt sogleich.</p>
+
+<h2>Fünfter Streich</h2>
+
+<p>Wer in Dorfe oder Stadt
+Einen Onkel wohnen hat,
+Der sei höflich und bescheiden,
+Denn das mag der Onkel leiden.
+Morgens sagt man: »Guten Morgen!
+Haben Sie was zu besorgen?«
+Bringt ihm, was er haben muß:
+Zeitung, Pfeife, Fidibus.
+Oder sollt' es wo im Rücken
+Drücken, beißen oder zwicken,
+Gleich ist man mit Freudigkeit
+Dienstbeflissen und bereit.
+Oder sei's nach einer Prise,
+Daß der Onkel heftig niese,
+Ruft man: »Prosit!« alsogleich.
+»Danke!« - »Wohl bekomm' es Euch!«
+Oder kommt er spät nach Haus,
+Zieht man ihm die Stiefel aus,
+Holt Pantoffel, Schlafrock, Mütze,
+Daß er nicht im Kalten sitze -
+Kurz, man ist darauf bedacht,
+Was dem Onkel Freude macht.
+
+Max und Moritz ihrerseits
+Fanden darin keinen Reiz.
+Denkt euch nur, welch schlechten Witz
+Machten sie mit Onkel Fritz!</p>
+
+<p class="clear"> <img  class="left" src="mum/Max_und_Moritz_(Busch)_050.png">Jeder weiß, was so ein Mai-
+Käfer für ein Vogel sei.
+In den Bäumen hin und her
+Fliegt und kriecht und krabbelt er.</p>
+
+<p class="clear"> <img  class="left" src="mum/Max_und_Moritz_(Busch)_051.png">Max und Moritz, immer munter,
+Schütteln sie vom Baum herunter.</p>
+
+<p class="clear"> <img  class="left" src="mum/Max_und_Moritz_(Busch)_052.png">In die Tüte von Papiere
+Sperren sie die Krabbeltiere.</p>
+
+<p class="clear"> <img  class="left" src="mum/Max_und_Moritz_(Busch)_053.png">Fort damit und in die Ecke
+Unter Onkel Fritzens Decke!</p>
+
+<p class="clear"> <img  class="left" src="mum/Max_und_Moritz_(Busch)_054.png">Bald zu Bett geht Onkel Fritze
+In der spitzen Zipfelmütze;
+
+Seine Augen macht er zu,
+Hüllt sich ein und schläft in Ruh.</p>
+
+<p class="clear"> <img  class="left" src="mum/Max_und_Moritz_(Busch)_055.png">Doch die Käfer, kritze, kratze!
+Kommen schnell aus der Matratze.</p>
+
+<p class="clear"> <img  class="left" src="mum/Max_und_Moritz_(Busch)_056.png">Schon faßt einer, der voran,
+Onkel Fritzens Nase an.</p>
+
+<p class="clear"> <img  class="left" src="mum/Max_und_Moritz_(Busch)_057.png">Bau!« - schreit er - »Was ist das hier?!!</p>
+
+<p class="clear"> <img  class="left" src="mum/Max_und_Moritz_(Busch)_058.png">Und erfaßt das Ungetier.</p>
+
+<p class="clear"> <img  class="left" src="mum/Max_und_Moritz_(Busch)_059.png">Und den Onkel, voller Grausen,
+Sieht man aus dem Bette sausen.</p>
+
+<p class="clear"> <img  class="left" src="mum/Max_und_Moritz_(Busch)_060.png">»Autsch!!« - Schon wieder hat er einen
+Im Genicke, an den Beinen;</p>
+
+<p class="clear"> <img  class="left" src="mum/Max_und_Moritz_(Busch)_061.png">Hin und her und rundherum
+Kriecht es, fliegt es mit Gebrumm.</p>
+
+<p class="clear"> <img  class="left" src="mum/Max_und_Moritz_(Busch)_062.png">Onkel Fritz, in dieser Not,
+Haut und trampelt alles tot.</p>
+
+<p class="clear"> <img  class="left" src="mum/Max_und_Moritz_(Busch)_063.png">Guckste wohl! Jetzt ist's vorbei
+Mit der Käferkrabbelei!</p>
+
+<p class="clear"> <img  class="left" src="mum/Max_und_Moritz_(Busch)_064.png">Onkel Fritz hat wieder Ruh
+Und macht seine Augen zu.</p>
+
+<p>Dieses war der fünfte Streich,
+Doch der sechste folgt sogleich.</p>
+
+<h2>Sechster Streich</h2>
+
+<p>In der schönen Osterzeit,
+Wenn die frommen Bäckersleut'
+Viele süße Zuckersachen
+Backen und zurechte machen,
+Wünschten Max und Moritz auch
+Sich so etwas zum Gebrauch. -</p>
+
+<p class="clear"> <img  class="left" src="mum/Max_und_Moritz_(Busch)_065.png">Doch der Bäcker, mit Bedacht,
+Hat das Backhaus zugemacht.</p>
+
+<p class="clear"> <img  class="left" src="mum/Max_und_Moritz_(Busch)_066.png">Also will hier einer stehlen,
+Muß er durch den Schlot sich quälen</p>
+
+<p class="clear"> <img  class="left" src="mum/Max_und_Moritz_(Busch)_067.png">Ratsch! Da kommen die zwei Knaben
+Durch den Schornstein, schwarz wie Raben</p>
+
+<p class="clear"> <img  class="left" src="mum/Max_und_Moritz_(Busch)_068.png">Puffl Sie fallen in die Kist',
+Wo das Mehl darinnen ist</p>
+
+<p class="clear"> <img  class="left" src="mum/Max_und_Moritz_(Busch)_069.png">Da! Nun sind sie alle beide
+Rund herum so weiß wie Kreide.</p>
+
+<p class="clear"> <img  class="left" src="mum/Max_und_Moritz_(Busch)_070.png">Aber schon mit viel Vergnügen
+Sehen sie die Brezeln liegen.</p>
+
+<p class="clear"> <img  class="left" src="mum/Max_und_Moritz_(Busch)_071.png">Knacks!! - Da bricht der Stuhl entzwei;</p>
+
+<p class="clear"> <img  class="left" src="mum/Max_und_Moritz_(Busch)_072.png">Schwapp!! - Da liegen sie im Brei.</p>
+
+<p class="clear"> <img  class="left" src="mum/Max_und_Moritz_(Busch)_073.png">Ganz von Kuchenteig umhüllt
+Stehn sie da als Jammerbild</p>
+
+<p class="clear"> <img  class="left" src="mum/Max_und_Moritz_(Busch)_074.png">Gleich erscheint der Meister Bäcker
+Und bemerkt die Zuckerlecker.</p>
+
+<p class="clear"> <img  class="left" src="mum/Max_und_Moritz_(Busch)_075.png">_Eins, zwei, drei! - Eh' man's gedacht,
+Sind zwei Brote draus gemacht</p>
+
+<p class="clear"> <img  class="left" src="mum/Max_und_Moritz_(Busch)_076.png">In dem Ofen glüht es noch -
+Ruff! - damit ins Ofenloch!</p>
+
+<p class="clear"> <img  class="left" src="mum/Max_und_Moritz_(Busch)_077.png">Ruff! Man zieht sie aus der Glut;
+Denn nun sind sie braun und gut. -</p>
+
+<p class="clear"> <img  class="left" src="mum/Max_und_Moritz_(Busch)_078.png">Jeder denkt, die sind perdü!
+Aber nein! - Noch leben sie!</p>
+
+<p class="clear"> <img  class="left" src="mum/Max_und_Moritz_(Busch)_079.png">Knusper, knasper! - wie zwei Mäuse
+Fressen sie durch das Gehäuse;</p>
+
+<p class="clear"> <img  class="left" src="mum/Max_und_Moritz_(Busch)_080.png">Und der Meister Bäcker schrie:
+»Ach herrje! Da laufen sie!«
+
+Dieses war der sechste Streich,
+Doch der letzte folgt sogleich.</p>
+
+<h2>Letzter Streich</h2>
+
+<p>Max und Moritz, wehe euch!
+Jetzt kommt euer letzter Streich! -</p>
+
+<p class="clear"> <img  class="left" src="mum/Max_und_Moritz_(Busch)_081.png">Wozu müssen auch die beiden
+Löcher in die Säcke schneiden?? -</p>
+
+<p class="clear"> <img  class="left" src="mum/Max_und_Moritz_(Busch)_082.png"> - Seht, da trägt der Bauer Mecke
+Einen seiner Maltersäcke. -</p>
+
+<p class="clear"> <img  class="left" src="mum/Max_und_Moritz_(Busch)_083.png">Aber kaum daß er von hinnen,
+Fängt das Korn schon an zu rinnen.</p>
+
+<p class="clear"> <img  class="left" src="mum/Max_und_Moritz_(Busch)_084.png">Und verwundert steht und spricht er:
+»Zapperment! Dat Ding werd lichter!«</p>
+
+<p class="clear"> <img  class="left" src="mum/Max_und_Moritz_(Busch)_085.png">Hei! Da sieht er voller Freude
+Max und Moritz im Getreide.</p>
+
+<p class="clear"> <img  class="left" src="mum/Max_und_Moritz_(Busch)_086.png">Rabs!! - in seinen großen Sack
+Schaufelt er das Lumpenpack</p>
+
+<p class="clear"> <img  class="left" src="mum/Max_und_Moritz_(Busch)_087.png">Max und Moritz wird es schwüle,
+Denn nun geht es nach der Mühle.</p>
+
+<p class="clear"> <img  class="left" src="mum/Max_und_Moritz_(Busch)_088.png">»Meister Müller, he, heran!
+Mahl er das, so schnell er kann!«</p>
+
+<p class="clear"> <img  class="left" src="mum/Max_und_Moritz_(Busch)_089.png">»Her damit!« Und in den Trichter
+Schüttet er die Bösewichter.</p>
+
+<p class="clear"> <img  class="left" src="mum/Max_und_Moritz_(Busch)_090.png">Rickeracke! Richeracke!
+Geht die Mühle mit Geknacke.</p>
+
+<p class="clear"> <img  class="left" src="mum/Max_und_Moritz_(Busch)_091.png">Hier kann man sie noch erblicken,
+Fein geschroten und in Stücken</p>
+
+<p class="clear"> <img  class="left" src="mum/Max_und_Moritz_(Busch)_092.png">Doch sogleich verzehret sie
+Meister Müllers Federvieh</p>
+
+<p class="clear"> <img  class="left" src="mum/Max_und_Moritz_(Busch)_093.png"></p>
+
+<br>
+<h2>Schluß</h2>
+
+<p>Als man dies im Dorf erfuhr,
+War von Trauer keine Spur.
+Witwe Bolte, mild und weich,
+Sprach: »Sieh da, ich dacht' es gleich!«
+»Jajaja!« rief Meister Böck.
+»Bosheit ist kein Lebenszweck!«
+Drauf so sprach Herr Lehrer Lämpel:
+»Dies ist wieder ein Exempel!«
+»Freilich«, meint' der Zuckerbäcker,
+»Warum ist der Mensch so lecker!«
+Selbst der gute Onkel Fritze
+Sprach: »Das kommt von dumme Witze!«
+Doch der brave Bauersmann
+Dachte: Wat geiht meck dat an!
+Kurz, im ganzen Ort herum
+Ging ein freudiges Gebrumm:
+»Gott sei Dank! Nun ist's vorbei
+Mit der Übeltäterei!«</p>
+
+<br>
+<hr>
+<p><a class="home green" href="#" onclick="goHome();return false;">home</a></p>
+
+</body>
+</html>

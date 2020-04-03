@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>cachetest</title>
+
+  <style>
+    @font-face {
+      font-family: 'OpenSansLight';
+      src: url('../font/OpenSans-Light.ttf') format('truetype');
+    }
+    body {
+      margin: 0px;
+      font-family: OpenSansLight, sans-serif;
+      font-size: 20px;
+      background-color: #000;
+      color: #fff;
+    }
+    p {
+      margin-left: 20px;
+      margin-top: 20px;
+    }
+    p.links {
+      line-height: 3;
+    }
+    a {
+      text-decoration: none;
+      color: white;
+      margin: 10px;
+      white-space: nowrap;
+    }
+    iframe {
+      border: none;
+    }
+    pre {
+      margin: 5px;
+    }
+    .button {
+      padding: 5px 15px;
+      border: 2px solid #fff;
+      border-radius: 5px;
+    }
+    .green {
+      color: #5f5;
+      border-color: #5f5;
+    }
+    .border {
+      border: 2px solid #fff;
+      border-radius: 5px;
+    }
+    .topborder {
+      border-top: 2px solid #999;
+    }
+    .topbox {
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      width: calc(100% - 20px);
+      height: 100px;
+      overflow: hidden;
+      padding: 0px 10px;
+    }
+    .commentary {
+      position: absolute;
+      bottom: 0px;
+      left: 15px;
+      width: 100%;
+      height: 30px;
+      font-size: 15px;
+      overflow: hidden;
+      color: yellow;
+    }
+    .status {
+      border: 2px solid #888;
+      border-radius: 5px;
+      padding: 8px 10px;
+      color: #888;
+      float: left;
+      margin: 12px 4px;
+    }
+    .testbox {
+      position: absolute;
+      left: 10px;
+      top: 100px;
+      width: calc(100% - 20px);
+    }
+    .hide {
+      visibility: hidden;
+      position: absolute;
+      top: 0px;
+      left: 0px;
+    }
+    </style>
+
+  <script src="modules/cachetest.js"></script>
+
+</head>
+<body>
+
+  <div class="topbox" id="topbox">
+
+    <a href="#" onclick="singleTest('expires'); return false;">
+      <div class="status" id="status_expires">
+        expires
+      </div>
+    </a>
+
+    <a href="#" onclick="singleTest('etag'); return false;">
+      <div class="status" id="status_etag">
+        etag
+      </div>
+    </a>
+
+    <a href="#" onclick="singleTest('last_modified'); return false;">
+      <div class="status" id="status_last_modified">
+        last-modified
+      </div>
+    </a>
+
+    <a href="#" onclick="singleTest('no_cache'); return false;">
+      <div class="status" id="status_no_cache">
+        no-cache
+      </div>
+    </a>
+
+    <a href="#" onclick="singleTest('max_age'); return false;">
+      <div class="status" id="status_max_age">
+        max-age=0
+      </div>
+    </a>
+
+    <div class="commentary" id="commentary">
+      starting...
+    </div>
+  </div>
+
+  <div class="testbox topborder" id="clientarea">
+    <iframe src="http://127.0.0.1:48710/api/version" name="testbox" id="testbox">
+       <p>iframes are not supported by your browser.</p>
+    </iframe>
+  <div>
+
+</body>
+</html>

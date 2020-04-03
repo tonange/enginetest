@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Notifications</title>
+
+  <link rel="stylesheet" href="css/notifications.css" />
+
+  <script src="script/eventEmitter/EventEmitter.js"></script>
+  <script src="script/viwiclient.js"></script>
+  <script src="script/new_notifications.js"></script>
+
+  <script>
+
+    function output(text) {
+      log('output', text);
+      var elem = document.getElementById('msgtext');
+      if (elem) {
+        elem.value = text;
+      }
+    }
+
+    function init() {
+      var ids = [
+        'name',
+        'headline',
+        'text',
+        'actionOne',
+        'additionalParameter'
+      ];
+      for (var i=0; i<ids.length; i++) {
+        initSpeller(ids[i]);
+      }
+    }
+
+    function unload() {
+      cleanup();
+    }
+
+    /**
+      get startet when loaded
+    **/
+    window.addEventListener('load', init);
+    /**
+      need to clean up before leaving
+    **/
+    window.addEventListener('unload', unload);
+
+  </script>
+
+</head>
+
+<body>
+
+  <div class="form">
+
+    <label for="name">name (submit adds a number)</label>
+    <input class="text" placeholder="enginetest"
+           name="name" id="name" type="text">
+
+    <label for="headline">headline</label>
+    <input class="text" placeholder="enginetest notification"
+          name="headline" id="headline" type="text">
+
+    <label for="text">text</label>
+    <input class="text" placeholder="Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\nSecond line.\nThird and last line."
+           name="text" id="text" type="text">
+
+    <label for="actionOne">actionOne</label>
+    <input class="text" placeholder="HMI_WEBAPP_START"
+           name="actionOne" id="actionOne" type="text">
+
+    <label for="additionalParameter">additionalParameter (enter one space to unset)</label>
+    <input class="text" placeholder="enginetest:enginetestGUI:foo=bar&baz"
+           name="additionalParameter" id="additionalParameter" type="text">
+
+
+    <div class="label">priority</div>
+    <div class="Row border thin grey">
+      <form id="priority">
+      <div class="Column cbox">
+        -2 <input id="pm2" name="priority" class="regular-radio big-radio" value="-2" type="radio"><label for="pm2"></label>
+      </div>
+      <div class="Column cbox">
+        -1 <input id="pm1" name="priority" class="regular-radio big-radio" value="-1" type="radio"><label for="pm1"></label>
+      </div>
+      <div class="Column cbox">
+        0 <input id="p0"  name="priority" class="regular-radio big-radio" value="0" checked type="radio"><label for="p0"></label>
+      </div>
+      <div class="Column cbox">
+        1 <input id="p1"  name="priority" class="regular-radio big-radio" value="1"  type="radio"><label for="p1"></label>
+      </div>
+      <div class="Column cbox">
+        2 <input id="p2"  name="priority" class="regular-radio big-radio" value="2"  type="radio"><label for="p2"></label>
+      </div>
+      </form>
+    </div>
+
+    <!-- create button -->
+    <div class="create">
+      <a class="border orange left" href="#" onclick="create('notifications');return false;">submit</a>
+      <input class="text left" name="msgtext" id="msgtext" type="text" readonly>
+    </div>
+
+  </div>
+
+</body>
+</html>

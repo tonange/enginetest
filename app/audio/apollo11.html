@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>apollo11 video</title>
+
+  <style>
+    body {
+      background-color: #000;
+      color: #fff;
+    }
+    video {
+      left: 50%;
+      position: absolute;
+      top: 0px;
+      transform: translate(-50%, 0%);
+      height: 100%;
+      width: auto;
+    }
+  </style>
+
+  <script>
+
+  function log() {
+    var args = Array.prototype.slice.call(arguments);
+    for (var i=0; i<args.length; i++) {
+      if (typeof args[i] === 'string' || args[i] instanceof String) {
+        // already a string: don't touch it
+      } else {
+        try {
+          args[i] = JSON.stringify(args[i]);
+        } catch(err) {
+          args[i] = args[i].toString();
+        }
+      }
+    }
+    var today = new Date().toISOString().slice(11, 23);
+    var now =  '[' + today + ']';
+    var msg = {
+      source: 'enginetest',
+      severity: 5,
+      timestamp: now,
+      message: args.join(' ')
+    };
+    console.log(JSON.stringify(msg));
+  }
+
+  function init() {
+    log("apollo11 video: init");
+    player = document.getElementById('player');
+    if (player) {
+      log("apollo11 video: play");
+      player.play();
+    }
+  };
+
+  /**
+    get startet when loaded
+  **/
+  window.addEventListener('load', init, false);
+
+  </script>
+
+</head>
+<body>
+
+  <video id="player">
+    <source src="media/apollo11.mp4"/>
+  </video
+
+</body>
+</html>

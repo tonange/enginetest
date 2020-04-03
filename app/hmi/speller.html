@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>HMI Speller</title>
+
+  <link rel="stylesheet" href="css/speller.css">
+
+  <script src="../rsi/script/eventEmitter/EventEmitter.js"></script>
+  <script src="../rsi/script/viwiclient.js"></script>
+  <script src="../script/housekeeping.js"></script>
+  <script src="script/log.js"></script>
+  <script src="script/streets.js"></script>
+  <script src="script/appspeller.js"></script>
+  <script src="script/speller.js"></script>
+
+  <script language="javascript" type="text/javascript">
+    /**
+      get startet when loaded
+    **/
+    window.addEventListener('load', init, false);
+  </script>
+
+</head>
+
+<body>
+
+  <div class="home">
+    <br><br>
+    <a id="home" class="border green" href="#" onclick="goHome();return false;">home</a>
+  </div>
+
+  <div class="Row">
+
+    <div class="Column">
+      <label for="noattrs">no attributes</label>
+      <input class="text" name="noattrs" id="noattrs" type="text">
+    </div>
+
+    <div class="Column">
+      <label for="default">has default value</label>
+      <input class="text" value="Default Value"
+             name="default" id="default" type="text">
+    </div>
+
+    <div class="Column">
+      <label for="title">has title</label>
+      <input class="text" title="This is the title"
+             name="title" id="title" type="text">
+    </div>
+
+  </div> <!-- Row -->
+
+  <div class="Row">
+
+    <div class="Column">
+      <label for="placeholder">has placeholder</label>
+      <input class="text" placeholder="This is the placeholder"
+             name="placeholder" id="placeholder" type="text">
+    </div>
+
+    <div class="Column">
+      <label for="all">has all</label>
+      <input class="text" placeholder="This is the placeholder"
+             title="This is the title"  value="Default Value"
+             name="all" id="all" type="text">
+    </div>
+
+    <div class="Column">
+      <label for="demo">demo with code</label>
+      <input class="text" placeholder="enter text here"
+             name="demo" id="demo" type="text">
+    </div>
+
+  </div> <!-- Row -->
+
+  <div class="Row">
+
+    <div class="Column">
+      <label for="placeholder">type=password</label>
+      <input class="text" name="password" id="password" type="password">
+    </div>
+
+    <div class="Column">
+      <label for="email">type=email</label>
+      <input class="text" name="email" id="email" type="email">
+    </div>
+
+    <div class="Column">
+      <label for="tel">type=tel</label>
+      <input class="text" name="tel" id="tel" type="tel">
+    </div>
+
+  </div> <!-- Row -->
+
+  <div class="Row">
+
+    <div class="Column">
+      <label for="number">type=number</label>
+      <input class="text" name="number" id="number" type="number">
+    </div>
+
+    <div class="Column">
+      <label for="sensitive">type=number (sensitive)</label>
+      <input class="text" name="sensitive" id="sensitive" type="number" sensitive=true>
+    </div>
+      
+    <div class="Column">
+      <label for="pin">type=pin (ICAS3)</label>
+      <input class="text" name="pin" id="pin" type="pin">
+    </div>
+        
+  </div> <!-- Row -->
+
+  <div class="Row">
+    
+    <div class="Column">
+      <div id="value"></div>
+    </div>
+  
+  </div> <!-- Row -->
+  
+  <div class="Row">
+
+    <div class="Column">
+      <div class="label">text opened by app (ICAS3)</div>
+      <div class="text" id="app"></div>
+    </div>
+  
+    <div class="Column">
+      <div class ="label" for="apppin">pin opened by app (ICAS3)</div>
+      <div class="text" id="apppin"></div>
+    </div>
+    
+  </div> <!-- Row -->
+  
+</body>
+</html>

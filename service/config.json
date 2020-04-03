@@ -1,0 +1,9 @@
+{
+	"port" : 48710,
+	"wsport" : 48711,
+	"tlsport" : 48713,
+	"parameterName": "engineinstanceURI",
+	"log": {
+		"source" : "enginetest"
+	}
+}

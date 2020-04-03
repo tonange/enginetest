@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+
+<html>
+<head><meta charset=utf-8>
+<title>Scrollbars</title>
+
+<script language="javascript" type="text/javascript">
+	function goHome() {
+			// FixMe: this is ugly
+			var myurl = new URL(location.href);
+			if (myurl.search.includes('engineinstanceURI')) {
+				var uri = myurl.origin + myurl.pathname.replace('scrollbars.html', 'index.html') + myurl.search;
+			} else {
+				var homeurl = new URL(document.referrer.replace('audioLastMode=true', 'audioLastMode=false'));
+				var uri = homeurl.origin + homeurl.pathname.replace('scrollbars.html', 'index.html') + homeurl.search;
+			}
+      location.href = uri;
+    }
+    function reload() {
+      var myurl = new URL(location.href);
+      var homeurl = new URL(document.referrer);
+      var uri = myurl.origin + myurl.pathname + homeurl.search;
+      location.href = uri;
+    }
+
+</script>
+
+<style>
+@font-face {
+  font-family: 'OpenSansLight';
+  src: url('font/OpenSans-Light.ttf') format('truetype');
+}
+body {
+  font-family: OpenSansLight, sans-serif;
+  margin: 0;
+  font-size: 20px;
+}
+a {
+  text-decoration: none;
+  color: black;
+  border: 2px solid #000;
+  border-radius: 5px;
+  padding: 5px 15px;
+  white-space: nowrap;
+}
+.container{
+  background: black;
+  width: 0px;
+  height:0px;
+}
+.home {
+  position: absolute;
+  top: 40px;
+  left: 10px;
+}
+.green {
+  color: #0a0;
+  border-color: #0a0;
+}
+
+.div_info {
+	position: absolute;
+	top:90px;
+	left:20px;
+}
+
+.div_width {
+	position: absolute;
+	top:0;
+	left:25%;
+	height: 25%;
+}
+
+.div_height {
+	position: absolute;
+	top:25%;
+	left:0;
+	width: 25%;
+}
+
+.btn_height{
+	margin: 1%;
+	padding: 5%;
+	border: 0px;
+	border-radius: 5px;
+	width: 90%;
+	height: 30%;
+	clear: both;
+}
+.div_dummy{
+	position: absolute;
+	top:0;
+	left:0;
+	width: 10%;
+	height: 10%;
+	opacity: 0.4;
+	z-index:-1;
+}
+
+.btn_width{
+	margin: 1%;
+	padding: 5%	;
+	border-radius: 5px;
+	border: 0px;
+	width: 30%;
+	height: 90%;
+}
+.btn_reload{
+	position: absolute;
+	width: 10%;
+	height: 10%;
+	top: 45%;
+	left: 45%;
+	border-radius: 5px;
+	border: 0px;
+}
+
+</style>
+</head>
+<body onload="init()">
+	<div class="container" id="container">
+    <a class="home green" href="#" onclick="goHome();return false;">home</a>
+		<div class="div_info" id="div_info" ></div>
+		<div class="div_width" id="div_width"></div>
+		<div class="div_height" id="div_height"></div>
+		<div class="div_dummy" id="div_dummy"></div>
+		<!-- button class="btn_reload" id="btn_reload" onclick="reload();">reload</button -->
+	</div>
+</body>
+
+<script src="rsi/script/eventEmitter/EventEmitter.js"></script>
+<script src="rsi/script/viwiclient.js"></script>
+<script src="script/housekeeping.js"></script>
+
+<script>
+var w_fit=false;
+var h_fit=false;
+var btnText = ["width: small","width: fit","width: big","height: small","height: fit","height: big"];
+var colors=["#C92740","#EE6D00", "#5DB800", "#93009C", "#0A59C2", "#FFFA0C"];
+
+function init(){
+	// web app housekeeping
+	var url = new URL(document.referrer);
+	var engineInstanceUri = url.searchParams.get('engineinstanceURI');
+	if (!engineInstanceUri) {
+		engineInstanceUri = url.searchParams.get('engineInstanceURI');
+	}
+	// ICAS3: --rsiRegistryURI=http://[::1]:80
+	var registry = url.searchParams.get('rsiRegistryURI');
+	if (!registry) {
+		// default
+		registry = 'http://127.0.0.1:443';
+	}
+	// target simulator trumps all
+	var viwi_port = url.searchParams.get('VIWI_PORT');
+	if (viwi_port) {
+		registry = 'http://127.0.0.1:' + viwi_port;
+	}
+	console.log(url);
+	console.log(registry);
+	if (engineInstanceUri) {
+		var housekeeping = new Housekeeping('enginetest', engineInstanceUri, registry);
+		housekeeping.subscribeEngineState();
+	}
+
+	var w = document.documentElement.clientWidth
+			|| document.body.clientWidth;
+
+	var h = document.documentElement.clientHeight
+			|| document.body.clientHeight;
+
+	document.getElementById("div_info").innerHTML="width: "+w+"<br> height: "+h;
+
+	var container=document.getElementById("container");
+
+	for(var i = 0; i < btnText.length; i++){
+		var btn = document.createElement("button");
+		if(i<3){
+			btn.className="btn_width";
+			btn.id="btn_"+i;
+			btn.style.backgroundColor=colors[i];
+			btn.appendChild(document.createTextNode(btnText[i]));
+			var div_width=document.getElementById("div_width");
+			div_width.appendChild(btn);
+		}else{
+			btn.className="btn_height";
+			btn.id="btn_"+i;
+			btn.style.backgroundColor=colors[i];
+			btn.appendChild(document.createTextNode(btnText[i]));
+			var div_height=document.getElementById("div_height");
+			div_height.appendChild(btn);
+	   }
+    btn.addEventListener("click", resize);
+	}
+	document.body.appendChild(container);
+}
+
+
+function fix_height(){
+	if(h_fit && (window.innerHeight > document.documentElement.clientHeight)){
+		document.getElementById("div_dummy").style.height=document.documentElement.clientHeight+"px";
+	}
+}
+
+
+function fix_width(){
+	if(w_fit && (window.innerWidth > document.documentElement.clientWidth)){
+		document.getElementById("div_dummy").style.width=document.documentElement.clientWidth+"px";
+	}
+}
+
+/*
+* Resize the dummy_div
+*/
+
+function resize(e){
+
+//Get the id-Numnber of the pressed Button
+var btn_id=Number(this.id.slice(-1));
+
+
+var w = document.documentElement.clientWidth
+|| document.body.clientWidth;
+
+var h = document.documentElement.clientHeight
+|| document.body.clientHeight;
+
+var div_dummy=document.getElementById("div_dummy");
+div_dummy.style.backgroundColor=colors[btn_id];
+
+	if(btn_id<3){
+	//Button for width was pressed
+		switch(btn_id%3){
+			case 0: //small
+				div_dummy.style.width=(0.5*w)+"px";
+				w_fit=false;
+				break;
+			case 1: //fit
+				div_dummy.style.width=w+"px";
+				w_fit=true;
+				fix_height();
+				break;
+			case 2: //big
+				div_dummy.style.width=(2*w)+"px";
+				w_fit=false;
+				break;
+		}
+	}else{
+	//Button for height was pressed
+		switch(btn_id%3){
+			case 0: //small
+				div_dummy.style.height=(0.5*h)+"px";
+				h_fit=false;
+				break;
+			case 1: //fit
+				div_dummy.style.height=h+"px";
+				h_fit=true;
+				fix_width();
+				break;
+			case 2: //big
+				div_dummy.style.height=(2*h)+"px";
+				h_fit=false;
+				break;
+		}
+	}
+   document.getElementById("div_info").innerHTML="width: "+div_dummy.style.width+"<br> height: "+div_dummy.style.height;
+}
+</script>
+
+
+</html>

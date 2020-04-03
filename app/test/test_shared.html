@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Shared Worker Test</title>
+
+	<style>
+		body { font-family: sans-serif; background-color: #eee; }
+	</style>
+
+	<script language="javascript" type="text/javascript">
+
+	/**
+		spawn a shared worker
+	**/
+
+	var worker;
+
+	function init() {
+		worker = new SharedWorker("dist/sharedworker.js",'sharedref')
+		worker.onerror = function(err) {
+		  info("spawn shared worker problem: " + err);
+		}
+		worker.port.addEventListener('message', onMessage, false);
+		worker.port.start();
+	}
+
+	/**
+		can handle events and commands
+
+			{event: 'eventname', ...}
+			{cmd: 'commandname'}
+	**/
+	function onMessage(evt) {
+		trace(evt.data);
+		if (evt.data.event) {
+			handleEvent(evt.data);
+		} else if (evt.data.cmd) {
+			handleCmd(evt.data);
+		}
+	}
+
+	/**
+		Event handler
+
+			on 'connect' send 'setColor' command with current settings
+	**/
+	function handleEvent(msg) {
+		switch (msg.event) {
+		case 'connect':
+			info(msg);
+			updateColor();
+			break;
+		}
+	}
+
+	/**
+		Command handler
+
+			on 'setColor' update the color box and the RGB checkboxes
+	**/
+	function handleCmd(msg) {
+		switch (msg.cmd) {
+		case 'setColor':
+		  document.getElementById('red').checked = msg.parameters.red;
+		  document.getElementById('green').checked = msg.parameters.green;
+		  document.getElementById('blue').checked = msg.parameters.blue;
+		  setColor(msg.parameters.red, msg.parameters.green, msg.parameters.blue)
+			break;
+		}
+	}
+
+	/**
+		RGB checkbox click handler
+
+			set the new color and send 'setColor' command to worker
+	**/
+	function handleClick(cb) {
+	  debug('clicked ' + cb.id + ' value ' + cb.checked);
+	 	updateColor();
+	}
+
+	function updateColor() {
+	  var red = document.getElementById('red').checked;
+	  var green = document.getElementById('green').checked;
+	  var blue = document.getElementById('blue').checked;
+    if (red && green && blue) {
+      red = false;    document.getElementById('red').checked = false;
+      green = false;  document.getElementById('green').checked = false;
+      blue = false;   document.getElementById('blue').checked = false;
+    }
+	  setColor(red, green, blue);
+	  sendState({'cmd': 'setColor', 'parameters': {'red': red, 'green': green, 'blue': blue}});
+	}
+
+	function RGB2HTML(red, green, blue)
+	{
+	    var decColor =0x1000000+ blue + 0x100 * green + 0x10000 *red ;
+	    return '#'+decColor.toString(16).substr(1);
+	}
+
+	function setColor(red, green, blue) {
+		var r = (red)   ? 255 : 0;
+		var g = (green) ? 255 : 0;
+		var b = (blue)  ? 255 : 0;
+	  var box = document.getElementById('box');
+		box.style.backgroundColor = RGB2HTML(r,g,b);
+	}
+
+	function sendState(msg) {
+		worker.port.postMessage(msg);
+	}
+
+	/**
+		log wrapper functions
+	**/
+	function info(msg) {
+		out(5, msg);
+	}
+	function debug(msg) {
+		out(6, msg);
+	}
+	function trace(msg) {
+		out(7, msg);
+	}
+	function out(severity, msg) {
+		console.log({'source': 'sharedref', 'severity': severity, 'message': msg});
+		console.log(JSON.stringify(msg));
+	}
+
+
+	/**
+		get startet when loaded
+	**/
+	window.addEventListener("load", init, false);
+
+	</script>
+
+</head>
+
+<body>
+
+	<h3>Shared Worker Reference</h3>
+
+	<div id="box" style="margin-left:10px;width:200px;height:50px;background-color:black;">
+	</div>
+
+	<div style="margin-left:70px;margin-top:20px;">
+		<input type="checkbox" id="red" onclick='handleClick(this);'> red<br><br>
+		<input type="checkbox" id="green" onclick='handleClick(this);'> green<br><br>
+		<input type="checkbox" id="blue" onclick='handleClick(this);'> blue<br><br>
+	</div>
+
+	<p>you need to start at least two instances of this test to see the worker in action</p>
+
+</body>
+</html>

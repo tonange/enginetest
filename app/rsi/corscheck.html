@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>RSI CORS Checker</title>
+
+  <script src="script/corscheck.js"></script>
+
+  <style>
+    @font-face {
+      font-family: 'OpenSansLight';
+      src: url('../font/OpenSans-Light.ttf') format('truetype');
+    }
+    body {
+      margin: 10px 15px;
+      font-family: OpenSansLight, sans-serif;
+      font-size: 14px;
+      background-color: #000;
+      color: #fff;
+    }
+    a {
+      text-decoration: none;
+      color: white;
+      margin: 10px;
+      white-space: nowrap;
+    }
+    .left {
+      float: left;
+      margin-right: 10px;
+    }
+    .green {
+      color: #5f5;
+    }
+    .orange {
+      color: orange;
+    }
+  </style>
+
+  <script>
+    /**
+      get startet when loaded
+    **/
+   window.addEventListener('load', init, false);
+	</script>
+
+</head>
+<body>
+
+<div id="status"></div>
+<hr>
+<div id="data"></div>
+
+
+</body>
+</html>

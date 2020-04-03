@@ -1,0 +1,327 @@
+
+<!doctype html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>local/session storage</title>
+
+  <style type="text/css">
+  @font-face {
+    font-family: 'OpenSansLight';
+    src: url('../font/OpenSans-Light.ttf') format('truetype');
+  }
+
+	body {
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    background-color: #000000;
+		font-family: OpenSansLight, sans-serif;
+    font-weight: lighter;
+		background-color: black;
+		color: white;
+		margin:0px;
+		padding:0px;
+	}
+
+	.invisible {
+	  visibility: hidden;
+	  height:0;
+	  width:0;
+	}
+
+	img {
+		margin: 0;
+	}
+
+	a {
+    color: white;
+	  text-decoration:none;
+	  border-style:none;
+	}
+  .green {
+    color: #5f5;
+    border-color: #5f5;
+  }
+
+	img.tile {
+		position: absolute;
+		left: 0;
+		top:0;
+	}
+
+	p.tile {
+		font-family: OpenSansLight, sans-serif;
+    font-weight: lighter;
+		font-size: 24px;
+		margin: 0;
+		margin-left: 5px;
+	}
+
+  .outbox {
+    position: absolute;
+    top: 15px;
+    left: 800px;
+  }
+
+  </style>
+
+  <script src="../rsi/script/eventEmitter/EventEmitter.js"></script>
+  <script src="../rsi/script/viwiclient.js"></script>
+  <script src="../script/housekeeping.js"></script>
+
+  <script language="javascript" type="text/javascript">
+    function goHome() {
+      log('goHome');
+      var myurl = new URL(location.href);
+      // FixMe: this is ugly
+			if (myurl.search.includes('engineinstanceURI')) {
+        var uri = myurl.origin + myurl.pathname.replace('characteristics/webstorage.html', 'index.html') + myurl.search;
+			} else {
+				var homeurl = new URL(document.referrer);
+        var uri = myurl.origin + myurl.pathname.replace('characteristics/webstorage.html', 'index.html') + homeurl.search;
+			}
+      location.href = uri;
+    }
+    function reload() {
+      log('reload');
+      var myurl = new URL(location.href);
+      var homeurl = new URL(document.referrer);
+      var uri = myurl.origin + myurl.pathname + homeurl.search;
+      location.href = uri;
+
+    }
+    function log() {
+      var args = Array.prototype.slice.call(arguments);
+      for (var i=0; i<args.length; i++) {
+        if (typeof args[i] === 'string' || args[i] instanceof String) {
+          // already a string: don't touch it
+        } else {
+          try {
+            args[i] = JSON.stringify(args[i]);
+          } catch(err) {
+            args[i] = args[i].toString();
+          }
+        }
+      }
+      var today = new Date().toISOString().slice(11, 23);
+      var now =  '[' + today + ']';
+      var msg = {
+        source: 'enginetest',
+        severity: 5,
+        timestamp: now,
+        message: args.join(' ')
+      };
+      console.log(JSON.stringify(msg));
+    }
+
+    function connectLinks() {
+      var ids = [
+        'test1',
+        'test2',
+        'test3',
+        'test4',
+        'test5',
+        'test6'
+      ];
+      for (var i=0; i<ids.length; i++) {
+        var a = document.getElementById(ids[i]);
+        if (a) {
+          a.onclick = function(e) {
+            var id = e.target.id;
+            log('webstorage ' + id);
+            test(id);
+            return false;
+          }
+        }
+      }
+    }
+
+    function init() {
+      connectLinks();
+
+      // web app housekeeping
+      var url = new URL(document.referrer);
+      var engineInstanceUri = url.searchParams.get('engineinstanceURI');
+      if (!engineInstanceUri) {
+        engineInstanceUri = url.searchParams.get('engineInstanceURI');
+      }
+      // ICAS3: --rsiRegistryURI=http://[::1]:80
+      var registry = url.searchParams.get('rsiRegistryURI');
+      if (!registry) {
+        // default
+        registry = 'http://127.0.0.1:443';
+      }
+      // target simulator trumps all
+      var viwi_port = url.searchParams.get('VIWI_PORT');
+			if (viwi_port) {
+				registry = 'http://127.0.0.1:' + viwi_port;
+			}
+      log('using registry at ' + registry);
+      if (engineInstanceUri) {
+        var housekeeping = new Housekeeping('enginetest', engineInstanceUri, registry);
+        housekeeping.subscribeEngineState();
+      }
+    };
+
+    /**
+      get startet when loaded
+    **/
+    window.addEventListener('load', init, false);
+
+  </script>
+
+</head>
+
+<body>
+  <a href="../index.html">
+    <div id="test1" style="position: fixed; top: 18px; left: 15px; width: 250px; height: 120px; background-color: #00BAE5;">
+      <p class="tile" style="margin-top: 84px; ">set session data</p>
+    </div>
+  </a>
+  <a href="../index.html">
+    <div id="test2" style="position: fixed; top: 18px; left: 275px; width: 250px; height: 120px; background-color: #93009C;">
+      <p class="tile" style="margin-top: 84px; ">change session data</p>
+    </div>
+  </a>
+  <a href="../index.html">
+    <div id="test3" style="position: fixed; top: 18px; left: 535px; width: 250px; height: 120px; background-color: #EE6D00;">
+      <p class="tile" style="margin-top: 84px; ">delete session data</p>
+    </div>
+  </a>
+  <a href="../index.html">
+    <div id="test4" style="position: fixed; top: 148px; left: 15px; width: 250px; height: 120px; background-color: #5DB800;">
+      <p class="tile" style="margin-top: 84px; ">set local data</p>
+    </div>
+  </a>
+  <a href="../index.html">
+    <div id="test5" style="position: fixed; top: 148px; left: 275px; width: 250px; height: 120px; background-color: #004887;">
+      <p class="tile" style="margin-top: 84px; ">change local data</p>
+    </div>
+  </a>
+  <a href="../index.html">
+    <div id="test6" style="position: fixed; top: 148px; left: 535px; width: 250px; height: 120px; background-color: #B71C46;">
+      <p class="tile" style="margin-top: 84px; ">delete local data</p>
+    </div>
+  </a>
+  <div style="position: absolute; left: 15px; top: 278px; width: 630px; height: 105px; background-color: darkblue; font-size: 20px; padding: 10px;">
+    session data:
+    <div id="sessiondata">&nbsp;&nbsp;&nbsp;</div>
+    local data:
+    <div id="localdata">&nbsp;&nbsp;&nbsp;</div>
+  </div>
+  <a class="yellow" style="position: absolute; top: 305px; left: 685px;" href="#" onclick="reload();return false;">
+    <p class="tile">reload</p>
+  </a>
+  <a class="green" style="position: absolute; top: 355px; left: 690px;" href="#" onclick="goHome();return false;">
+    <p class="tile">home</p>
+  </a>
+
+  <div id="outbox" class="outbox"></div>
+
+<script>
+
+const indent = '&nbsp;&nbsp;&nbsp;';
+
+var sessionKey = 'MOD.test.storage.session';
+var localKey = 'MOD.test.storage.local';
+
+var session = document.getElementById('sessiondata');
+session.innerHTML = session.innerHTML + loadData(sessionKey, false) + '<br>';
+var local = document.getElementById('localdata');
+local.innerHTML = local.innerHTML + loadData(localKey, true) + '<br>';
+
+if (localStorage) {
+  window.addEventListener('storage', function(evt) {
+    log('storage event:', 'key', evt.key, 'old', evt.oldValue, 'new', evt.newValue);
+    out('storage event<br><blockquote>key: ' + evt.key + '<br> old: ' + evt.oldValue + '<br> new: ' + evt.newValue + '</blockquote>');
+    local.innerHTML = indent + evt.newValue;
+  });
+}
+
+function test(step) {
+	switch (step) {
+	case 'test1':
+		saveData(sessionKey, false, 'MOD session storage saved value');
+    setTimeout(function() { reload(); }, 100);
+    break;
+	case 'test2':
+		saveData(sessionKey, false, 'changed MOD session storage saved value');
+    setTimeout(function() { reload(); }, 100);
+		break;
+	case 'test3':
+		if (sessionStorage) {
+			console.log('sessionStorage.removeItem('+sessionKey+')');
+			sessionStorage.removeItem(sessionKey);
+      setTimeout(function() { reload(); }, 100);
+		}
+		break;
+	case 'test4':
+		saveData(localKey, true, 'MOD local storage saved value');
+    local.innerHTML = indent + 'MOD local storage saved value';
+		break;
+	case 'test5':
+		saveData(localKey, true, 'changed MOD local storage saved value');
+    local.innerHTML = indent + 'changed MOD local storage saved value';
+		break;
+	case 'test6':
+		if (localStorage) {
+			log('localStorage.removeItem', localKey);
+      local.innerHTML = '';
+			localStorage.removeItem(localKey);
+		}
+		break;
+	}
+}
+
+
+/*
+ * write data to WebStorage
+ */
+function saveData(storageKey, persistent, data) {
+	log('saveData('+storageKey+', '+persistent+', '+data+')');
+	if (persistent) {
+		if (localStorage) {
+      localStorage.setItem(storageKey, data);
+		}
+	} else {
+		if (sessionStorage) {
+			sessionStorage.setItem(storageKey, data);
+		}
+}
+}
+
+/*
+ * get data from WebStorage
+ */
+function loadData(storageKey, persistent) {
+	var data = '';
+	if (persistent) {
+		if (localStorage) {
+			if (localStorage.getItem(storageKey)) {
+				data = localStorage.getItem(storageKey);
+			}
+		}
+	} else {
+		if (sessionStorage) {
+			if (sessionStorage.getItem(storageKey)) {
+				data = sessionStorage.getItem(storageKey);
+			}
+		}
+	}
+	log('loadData('+storageKey+', '+persistent+'): '+data);
+	return data;
+}
+
+function out(text) {
+  var outbox = document.getElementById('outbox');
+  if (outbox) {
+    outbox.innerHTML = outbox.innerHTML + text;
+  }
+}
+
+</script>
+
+</body>
+</html>

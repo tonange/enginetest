@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Complex Text Layout</title>
+
+  <style>
+    @font-face {
+      font-family: 'OpenSansLight';
+      src: url('font/OpenSans-Light.ttf') format('truetype');
+    }
+    @font-face {
+      font-family: 'Arabic Typesetting';
+        src: url('font/arabtype.ttf') format('truetype');
+    }
+    body {
+      font-family: OpenSansLight, sans-serif;
+      font-weight: lighter;
+      background-color: #000;
+      color: #fff;
+    }
+    p {
+      font-size: 24px;
+      margin-top: 0px;
+      margin-left: 20px;
+      margin-bottom: 10px;
+    }
+    .carui {
+      font-family: 'VW Text CarUI'
+    }
+    .arabic {
+      font-family: 'Arabic Typesetting';
+    }
+    .big {
+      font-size: 72px;
+    }
+    a {
+      text-decoration: none;
+      color: white;
+    }
+    .border {
+      border: 2px solid #fff;
+      border-radius: 5px;
+      padding: 5px 15px;
+      white-space: nowrap;
+    }
+    .green {
+      color: #5f5;
+      border-color: #5f5;
+    }
+    .refimg {
+      margin-left: 10px;
+      background-color: white;
+      border: 1px solid white;
+    }
+    .left {
+      float: left;
+    }
+    .right {
+      float: right;
+    }
+    .clear {
+      clear: both;
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <h2>Font 'VW Text CarUI'</h2>
+  <p class="carui">The word العربية al-arabiyyah, "the Arabic [language]" in Arabic
+  <h2>Font 'Arabic Typesetting'</h2>
+  <p class="arabic big">العربية</p>
+
+  <h2>Reference Bitmap (chrome on Mac)</h2>
+  <img class="refimg" src="img/arabic_ref.png">
+
+  <h2>Wikipedia</h2>
+  <img class="refimg left" src="img/arabic.png">
+  <img class="refimg" height="360" src="img/description.png">
+
+</body>
+</html>

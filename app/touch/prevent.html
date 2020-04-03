@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>prevent scroll</title>
+
+  <style>
+    @font-face {
+      font-family: 'OpenSansLight';
+      src: url('../font/OpenSans-Light.ttf') format('truetype');
+    }
+    body {
+      margin: 0px;
+      font-family: OpenSansLight, sans-serif;
+      font-size: 20px;
+      background-color: #000;
+      color: #fff;
+    }
+    a {
+      text-decoration: none;
+      color: white;
+      margin: 10px;
+      white-space: nowrap;
+    }
+    .home {
+      position: fixed;
+      top: 10px;
+      left: 35px;
+    }
+    .button {
+      padding: 5px 15px;
+      border: 2px solid #fff;
+      border-radius: 5px;
+    }
+    .border {
+      border: 2px solid #fff;
+      border-radius: 5px;
+    }
+    .green {
+      color: #5f5;
+      border-color: #5f5;
+    }
+    #scale {
+      position: absolute;
+      top: 0px;
+      left: 120px;
+    }
+    .bottom {
+      color: orange;
+      border-bottom: 1px solid orange;
+    }
+
+    .regular-checkbox {
+        display: none;
+    }
+
+    .regular-checkbox + label {
+        margin-left: 5px;
+        background-color: #e9ecee;
+        border: 1px solid #cacece;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.05), inset 0px -10px 5px -7px rgba(0,0,0,0.05);
+        padding: 10px;
+        border-radius: 3px;
+        display: inline-block;
+        position: relative;
+        top: 4px;
+    }
+
+    .regular-checkbox + label:active, .regular-checkbox:checked + label:active {
+        box-shadow: 0 1px 2px rgba(0,0,0,0.05), inset 0px 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .regular-checkbox:checked + label {
+        background-color: #e9ecee;
+        border: 1px solid #adb8c0;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.05), inset 0px -10px 5px -7px rgba(0,0,0,0.05), inset 10px 5px -7px rgba(255,255,255,0.1);
+        color: #000;
+    }
+
+    .regular-checkbox:checked + label:after {
+        content: 'x';
+    	  font-size: 20px;
+        position: absolute;
+        top: -4px;
+        left: 2px;
+        color: #000;
+    }
+
+  </style>
+
+  <script>
+
+    function goHome() {
+      var url = new URL(location.href);
+      location.href = "../index.html" + url.search;
+    }
+
+    function log() {
+      var args = Array.prototype.slice.call(arguments);
+      for (var i=0; i<args.length; i++) {
+        if (typeof args[i] === 'string' || args[i] instanceof String) {
+          // already a string: don't touch it
+        } else {
+          try {
+            args[i] = JSON.stringify(args[i]);
+          } catch(err) {
+            args[i] = args[i].toString();
+          }
+        }
+      }
+      var today = new Date().toISOString().slice(11, 23);
+	    var now =  '[' + today + ']';
+      var msg = {
+        source: 'enginetest',
+        severity: 5,
+        timestamp: now,
+        message: args.join(' ')
+      };
+      console.log(JSON.stringify(msg));
+    }
+    function init() {
+      // prevent touch scrolling
+      //   https://www.html5rocks.com/en/mobile/touch/ (Prevent Scrolling)
+      document.body.addEventListener('touchmove', function(event) {
+        if (document.getElementById('prevent').checked) {
+          log('prevent');
+          event.preventDefault();
+        }
+      }, false);
+
+      var h = window.innerHeight;
+      var bottom = document.getElementById('bottom');
+      bottom.style.marginTop = (h*1.5-20)+'px';
+      var scale = document.getElementById('scale');
+      for (var top=20; top<150; top+=20) {
+        var div = document.createElement("div");
+        div.style.position = "absolute";
+        div.style.top = (h * top/100)+'px';
+        div.style.width = "50px";
+        div.style.height = "50px";
+        div.style.textAlign = "center";
+        div.style.color = "orange";
+        div.style.border = "2px solid orange";
+        div.style.borderRadius = "5px";
+        div.innerHTML = top+"%";
+        scale.appendChild(div);
+      }
+    }
+
+    /**
+      get startet when loaded
+    **/
+    window.addEventListener('load', init, false);
+
+  </script>
+
+</head>
+<body>
+
+  <p class="home"><a class="button green" href="#" onclick="goHome();return false;">home</a>
+    prevent scrolling by touch: <input name="prevent" id="prevent" class="regular-checkbox" type="checkbox"><label for=prevent></label>
+  </p>
+
+  <div id="scale"></div>
+
+  <div class="bottom" id="bottom">
+    bottom line
+  </div>
+
+</body>
+</html>

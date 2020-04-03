@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>font linking via CSS unicode-range</title>
+
+<style type="text/css">
+
+@font-face {
+  font-family: 'OpenSansLight';
+  src: url('font/OpenSans-Light.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'CloudSongFangGBK';
+  src: url('font/CloudSongFangGBK.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'OpenSansLight_CloudSongFangGBK';
+    src: url('font/CloudSongFangGBK.ttf') format('truetype');
+  unicode-range: U+4E00-9FCC;
+}
+
+@font-face {
+  font-family: 'OpenSansLight_CloudSongFangGBK';
+  src: url('font/OpenSans-Light.ttf') format('truetype');
+}
+
+body {
+  font-family: 'OpenSansLight', 'VW Text CarUI', sans-serif;
+  font-size: 24px;
+  background-color: #000;
+  color: #fff;
+}
+
+a {
+  text-decoration: none;
+  color: white;
+}
+.border {
+  border: 2px solid #fff;
+  border-radius: 5px;
+  padding: 5px 15px;
+  white-space: nowrap;
+}
+.green {
+  color: #5f5;
+  border-color: #5f5;
+}
+
+h3 {
+  font-size: 24px;
+  margin-top: 15px;
+  margin-bottom: 10px;
+}
+
+p.linked {
+  font-family: 'OpenSansLight_CloudSongFangGBK';
+}
+
+p.chinese {
+  font-family: 'CloudSongFangGBK';
+}
+
+</style>
+
+</head>
+
+<body>
+<h3>Open Sans Light only</h3>
+<p>敏捷的棕色狐狸躍過那隻懶狗.
+<br>The quick brown fox jumps over the lazy dog.
+</p>
+<h3>CloudSongFang only</h3>
+<p class="chinese">敏捷的棕色狐狸躍過那隻懶狗.
+<br>The quick brown fox jumps over the lazy dog.
+</p>
+<h3>CloudSongFang and Open Sans linked</h3>
+<p class="linked">敏捷的棕色狐狸躍過那隻懶狗.
+<br>The quick brown fox jumps over the lazy dog.
+<h3>Reference Bitmap (chrome on Mac)</h3>
+<img style="border: 1px solid white;" src="img/reference.png">
+</p>
+
+
+</body>
+
+</html>

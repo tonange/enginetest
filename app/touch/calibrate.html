@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,user-scalable=no">
+  <title>touch calibrate</title>
+
+  <style>
+    @font-face {
+      font-family: 'OpenSansLight';
+      src: url('../font/OpenSans-Light.ttf') format('truetype');
+    }
+    body {
+      margin: 0px;
+      font-family: OpenSansLight, sans-serif;
+      font-size: 20px;
+      background-color: #000;
+      color: #fff;
+      overflow: hidden;
+    }
+    p {
+      margin: 80px 50px;
+      color: orange;
+    }
+    .target {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background-color: orange;
+      border: 1px solid white;
+      border-radius: 10px;
+    }
+    .label {
+      font-size: 14px;
+      position: absolute;
+      width: 200px;
+      height: 20px;
+    }
+    .output {
+      font-size: 14px;
+      position: absolute;
+      top: 40px;
+      left: 200px;
+      white-space: pre;
+    }
+  </style>
+
+  <script>
+    var w = window.innerWidth;
+    var h = window.innerHeight;
+
+    var displaytext = '';
+
+    function report(e) {
+      log( 'report', e.type );
+      if (e.type == 'touchstart') {
+        displaytext = '';
+      }
+      displaytext += 'event: ' + e.type + '\n';
+      displaytext += '  touches:\n';
+      for (t=0; t<e.touches.length; t++) {
+        displaytext += '    ' + t + ':\n';
+        displaytext += '      clientX: ' + e.touches[t].clientX + '\n';
+        displaytext += '      clientY: ' + e.touches[t].clientY + '\n';
+        displaytext += '      pageX: '   + e.touches[t].pageX + '\n';
+        displaytext += '      pageY: '   + e.touches[t].pageY + '\n';
+        displaytext += '      screenX: ' + e.touches[t].screenX + '\n';
+        displaytext += '      screenY: ' + e.touches[t].screenY + '\n';
+      }
+      output('output', displaytext);
+    }
+
+    function output(id, text) {
+      var elem = document.getElementById(id);
+      if (elem) {
+        elem.innerHTML = text;
+      }
+    }
+
+    function log() {
+      var args = Array.prototype.slice.call(arguments);
+      for (var i=0; i<args.length; i++) {
+        if (typeof args[i] === 'string' || args[i] instanceof String) {
+          // already a string: don't touch it
+        } else {
+          try {
+            args[i] = JSON.stringify(args[i]);
+          } catch(err) {
+            args[i] = args[i].toString();
+          }
+        }
+      }
+      var today = new Date().toISOString().slice(11, 23);
+	    var now =  '[' + today + ']';
+      var msg = {
+        source: 'enginetest',
+        severity: 5,
+        timestamp: now,
+        message: args.join(' ')
+      };
+      console.log(JSON.stringify(msg));
+    }
+    function init() {
+      document.addEventListener('touchstart',report);
+      document.addEventListener('touchmove',report);
+      document.addEventListener('touchend',report);
+      document.addEventListener('touchcancel',report);
+
+      const size = 20;
+      const margin = 20;
+
+      position('target1',            margin,            margin);
+      position('target2', w - size - margin,            margin);
+      position('target3',            margin, h - size - margin);
+      position('target4', w - size - margin, h - size - margin);
+
+      const width = 200;
+      const height = 20;
+      position('label1', margin + size, margin + size);
+      position('label2', w - size - margin - width, margin + size);
+      position('label3', margin + size, h - size - margin - height);
+      position('label4', w - size - margin - size - width + size, h - size - margin - height);
+
+      label('label1', 'target1', true);
+      label('label2', 'target2', false);
+      label('label3', 'target3', true);
+      label('label4', 'target4', false);
+    }
+
+    function label(id, item, alignLeft) {
+      var elem = document.getElementById(id);
+      var item = document.getElementById(item);
+      if (elem && item) {
+        var x = item.offsetLeft + Math.round(item.offsetWidth/2);
+        var y = item.offsetTop + Math.round(item.offsetHeight/2);
+        var text = 'center: ' + x;
+        text += '/' + y;
+        elem.innerHTML = text;
+        if (!alignLeft) {
+          elem.style.textAlign = 'right';
+        }
+      }
+    }
+
+    function position(id, left, top) {
+      var elem = document.getElementById(id);
+      if (elem) {
+        elem.style.top = top + 'px';
+        elem.style.left = left + 'px';
+      }
+    }
+
+    /**
+      get startet when loaded
+    **/
+    window.addEventListener('load', init, false);
+
+  </script>
+
+</head>
+<body>
+
+  <div id="target1" class="target"></div>
+  <div id="target2" class="target"></div>
+  <div id="target3" class="target"></div>
+  <div id="target4" class="target"></div>
+  <div id="label1" class="label"></div>
+  <div id="label2" class="label"></div>
+  <div id="label3" class="label"></div>
+  <div id="label4" class="label"></div>
+
+  <div id="output" class="output">event: </div>
+
+</body>
+</html>

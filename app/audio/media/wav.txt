@@ -1,0 +1,20 @@
+General
+Complete name                            : /Users/ecki/Documents/workspace/mod/enginetest/main/audio/media/Es tanzt ein Bi-Ba-Butzemann.wav
+Format                                   : Wave
+File size                                : 13.7 MiB
+Duration                                 : 1mn 14s
+Overall bit rate mode                    : Constant
+Overall bit rate                         : 1 536 Kbps
+
+Audio
+Format                                   : PCM
+Format settings                          : Little / Signed
+Codec ID                                 : 1
+Duration                                 : 1mn 14s
+Bit rate mode                            : Constant
+Bit rate                                 : 1 536 Kbps
+Channel(s)                               : 2 channels
+Sampling rate                            : 48.0 KHz
+Bit depth                                : 16 bits
+Stream size                              : 13.7 MiB (100%)
+
